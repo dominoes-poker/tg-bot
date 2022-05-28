@@ -1,0 +1,1 @@
+from bot.common.singleton_metaclass import SingletonMetaClass
