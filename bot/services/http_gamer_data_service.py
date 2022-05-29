@@ -1,7 +1,7 @@
 from typing import Any, Callable, Dict, Generator, Optional
 import aiohttp
 from bot.services.gamer_data_service import GamerDataService
-from data_type.gamer import Gamer
+from bot.data_types.gamer import Gamer
 
 
 def load_gamers(data: Dict) -> Generator[Gamer, None, None]:

@@ -1,9 +1,11 @@
 from typing import List
 from aiogram import Dispatcher, Router
-from bot.handlers import WellcomeEventHandler
+from bot.routers.gamer_register_router import GamerRegisterRouter, create_gamer_register_router
+
+from bot.routers.wellcome_router import WellcomeRouter, create_wellcome_router
 from bot.services.factory import get_gamer_data_service
 from bot.tgbot import TGBot
-from routers.router import RootRouter
+from bot.routers.router import RootRouter
 
 
 def create_dispatcher(routers: List[Router]) -> Dispatcher:
@@ -15,7 +17,9 @@ def create_dispatcher(routers: List[Router]) -> Dispatcher:
     return dispatcher
 
 def create_bot(token: str) -> TGBot:
-    handler = WellcomeEventHandler(get_gamer_data_service())
-    router = RootRouter(handler)
+    gamer_data_service = get_gamer_data_service()
+    wellcome_router: WellcomeRouter = create_wellcome_router(gamer_data_service)
+    gamer_register_router: GamerRegisterRouter = create_gamer_register_router(gamer_data_service)
+    router = RootRouter(wellcome_router, gamer_register_router)
     dispatcher = create_dispatcher([router,])
     return TGBot(token, dispatcher)
