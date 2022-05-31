@@ -23,18 +23,7 @@ class GamerRegisterHandler(Handler):
         await state.set_state(GamerRegisterState.NAME)
 
     async def handle_name(self, message: IncommingMessage, state: FSMContext) -> None:
-        await state.update_data({'name': message.text})
-        await self._bot.send(
-            chat_id = message.chat.id,
-            text=f'Ok, I will call you {message.text}. Now send me your username.',
-            reply_markup = ReplyKeyboardRemove
-        )
-        await state.set_state(GamerRegisterState.USERNAME)
-
-    async def handle_username(self, message: IncommingMessage, state: FSMContext) -> None:
-        await state.update_data({'username': message.text})
-        data = await state.get_data()
-        gamer = Gamer(name=data['name'], username=['username'], identificator=message.user_id)
+        gamer = Gamer(name=message.text, identificator=message.user_id)
         gamer = await self._gamer_data_service.register(gamer)
         await self._bot.send(
             chat_id = message.chat.id,

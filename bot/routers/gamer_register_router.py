@@ -11,11 +11,10 @@ class GamerRegisterRouter(TGRouter):
         super().__init__(use_builtin_filters=True, name='GamerRegisterRouter')
         self.setup(handler=handler)
 
-    def setup(self, handler: Handler) -> None:
+    def setup(self, handler: GamerRegisterHandler) -> None:
         self.message.register(self.handler(handler.ask_name),
                               RootState.GAMER_REGISTER, F.text.casefold() == 'yes')
         self.message.register(self.handler(handler.handle_name), GamerRegisterState.NAME)
-        self.message.register(self.handler(handler.handle_username), GamerRegisterState.USERNAME)
 
 
 def create_game_register_router(dispatcher: TGDispatcher,

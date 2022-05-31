@@ -6,7 +6,7 @@ GamersLoaderType =  Callable[[Dict], List[Gamer]]
 
 class GamerDataService(DataService):
 
-    async def get_gmaer(self, identificator: int,
+    async def get_gamer(self, identificator: int,
                         loader: GamersLoaderType) -> Optional[Gamer]:
         raise NotImplementedError
 

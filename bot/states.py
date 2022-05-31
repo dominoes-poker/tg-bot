@@ -6,4 +6,3 @@ class RootState(StatesGroup):
 
 class GamerRegisterState(StatesGroup):
     NAME = State()
-    USERNAME = State()

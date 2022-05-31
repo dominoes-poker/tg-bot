@@ -11,14 +11,12 @@ def load_gamer(data: Dict) -> Gamer:
     return Gamer(
             id = data['id'],
             identificator = data['identificator'],
-            username = data['username'],
             name = data['name'],
         )
 
 def gamer_to_dict(gamer: Gamer) -> Dict:
     return {
         'identificator': gamer.identificator,
-        'username': gamer.username,
         'name': gamer.name,
     }
 
@@ -44,7 +42,7 @@ class HTTPGamerDataService(GamerDataService):
     def gamer_api_url(self) -> str:
         return f'{self.api_url}/gamer'
 
-    async def get_gmaer(self, identificator: int,
+    async def get_gamer(self, identificator: int,
                         loader: GamersLoaderType = load_gamers) -> Optional[Gamer]:
         url = f'{self.gamer_api_url}?identificator={identificator}'
         result = await self.get(url)
