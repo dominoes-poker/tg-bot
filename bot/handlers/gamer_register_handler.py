@@ -1,36 +1,44 @@
 from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.types import Message, ReplyKeyboardRemove
-from bot.handlers.common.keyboards import ON_HOLD_KEYBOARD, YES_NO_KEYBOARD
+from aiogram.types import ReplyKeyboardRemove
 
+from bot.bot import TGBot
+from bot.handlers.common.keyboards import ON_HOLD_KEYBOARD
 from bot.handlers.handler import Handler
 from bot.services import GamerDataService
-from bot.states import GamerRegisterState
+from bot.states import GamerRegisterState, RootState
+from bot.types import Gamer, IncommingMessage
 
 
 class GamerRegisterHandler(Handler):
-    def __init__(self, gamer_data_service: GamerDataService) -> None:
-        super().__init__()
+    def __init__(self, bot: TGBot, gamer_data_service: GamerDataService) -> None:
+        super().__init__(bot)
         self._gamer_data_service = gamer_data_service
 
-    async def ask_name(self, message: Message, state: FSMContext) -> None:
-        await message.answer(
+    async def ask_name(self, message: IncommingMessage, state: FSMContext) -> None:
+        await self._bot.send(
+            chat_id = message.chat.id,
             text='Great! Send me your name',
-            reply_markup = ReplyKeyboardRemove
+            reply_markup=ReplyKeyboardRemove
         )
         await state.set_state(GamerRegisterState.NAME)
 
-    async def handle_name(self, message: Message, state: FSMContext) -> None:
-        await state.set_data({'name': message.text})
-        await message.answer(
-            text=f'Ok, will call you {message.text}. Now send me your username',
+    async def handle_name(self, message: IncommingMessage, state: FSMContext) -> None:
+        await state.update_data({'name': message.text})
+        await self._bot.send(
+            chat_id = message.chat.id,
+            text=f'Ok, I will call you {message.text}. Now send me your username.',
             reply_markup = ReplyKeyboardRemove
         )
         await state.set_state(GamerRegisterState.USERNAME)
 
-    async def handle_username(self, message: Message, state: FSMContext) -> None:
-        await state.set_data({'username': message.text})
-        await message.answer(
-            text=f'Ok, I got it',
-            reply_markup = ReplyKeyboardRemove
+    async def handle_username(self, message: IncommingMessage, state: FSMContext) -> None:
+        await state.update_data({'username': message.text})
+        data = await state.get_data()
+        gamer = Gamer(name=data['name'], username=['username'], identificator=message.user_id)
+        gamer = await self._gamer_data_service.register(gamer)
+        await self._bot.send(
+            chat_id = message.chat.id,
+            text='Ok, I got it. What do you want next?',
+            reply_markup = ON_HOLD_KEYBOARD
         )
-        await state.set_state(GamerRegisterState.USERNAME)
+        await state.set_state(RootState.ON_HOLD)

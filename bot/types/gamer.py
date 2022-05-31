@@ -1,11 +1,11 @@
 
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Optional
 
 
 @dataclass
 class Gamer:
-    id: Optional[int]
     identificator: int
     username: str
     name: str
+    id: Optional[int] = None

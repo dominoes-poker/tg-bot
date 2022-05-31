@@ -1,12 +1,14 @@
+from typing import Callable, Dict, List, Optional
+from bot.types.gamer import Gamer
 from bot.services.data_service import DataService
 
+GamersLoaderType =  Callable[[Dict], List[Gamer]]
 
 class GamerDataService(DataService):
-    def __init__(self) -> None:
-        pass
-    
-    async def get_gamer(identificator: int) -> ...:
+
+    async def get_gmaer(self, identificator: int,
+                        loader: GamersLoaderType) -> Optional[Gamer]:
         raise NotImplementedError
 
-    def register(gamer: ...):
+    async def register(self, gamer: Gamer):
         raise NotImplementedError

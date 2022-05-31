@@ -1,11 +1,20 @@
 from aiogram import Router
+from aiogram.types import TelegramObject, Message
+from aiogram.dispatcher.fsm.context import FSMContext
+
+from bot.types import EventCallbackType, IncommingMessage, IncommingMessageWrapper
 
 
-class RootRouter(Router):
-    def __init__(self, wellcome_router: Router, gamer_register_router: Router) -> None:
-        super().__init__(use_builtin_filters=True, name="StartingHandler")
-        self.setup(wellcome_router=wellcome_router, gamer_register_router=gamer_register_router)
-        
-    def setup(self, wellcome_router: Router, gamer_register_router: Router) -> None:
-        self.include_router(wellcome_router)
-        self.include_router(gamer_register_router)
+class TGRouter(Router):
+
+    @staticmethod
+    def create_message(tg_object: TelegramObject) -> IncommingMessage:
+        if isinstance(tg_object, Message):
+            return IncommingMessageWrapper(tg_object=tg_object)
+        raise TypeError
+
+    def handler(self, event_callback: EventCallbackType):
+        async def callback(tg_object: TelegramObject, state: FSMContext):
+            message = self.create_message(tg_object)
+            return await event_callback(message, state)
+        return callback

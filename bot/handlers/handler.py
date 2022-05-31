@@ -1,7 +1,7 @@
-from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.types import Message
+
+from bot.bot import TGBot
+
 
 class Handler:
-    
-    async def handle(self, message: Message, state: FSMContext) -> None:
-        raise NotImplementedError
+    def __init__(self, bot: TGBot) -> None:
+        self._bot = bot
