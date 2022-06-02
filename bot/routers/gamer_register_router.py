@@ -1,8 +1,8 @@
 from aiogram import F
 from bot.dispatcher import TGDispatcher
-from bot.handlers import Handler, GamerRegisterHandler
+from bot.routers.handlers import GamerRegisterHandler
 from bot.routers.router import TGRouter
-from bot.services.gamer_data_service import GamerDataService
+from bot.services.gamer_service import GamerDataService
 from bot.states import GamerRegisterState, RootState
 
 
@@ -12,14 +12,13 @@ class GamerRegisterRouter(TGRouter):
         self.setup(handler=handler)
 
     def setup(self, handler: GamerRegisterHandler) -> None:
-        self.message.register(self.handler(handler.ask_name),
-                              RootState.GAMER_REGISTER, F.text.casefold() == 'yes')
-        self.message.register(self.handler(handler.handle_name), GamerRegisterState.NAME)
+        self.message.register(self.handler(handler.ask_username), RootState.GAMER_REGISTER, F.text.casefold() == 'yes')
+        self.message.register(self.handler(handler.handle_username), GamerRegisterState.WAIT_USERNAME)
 
 
 def create_game_register_router(dispatcher: TGDispatcher,
                                 gamer_data_service: GamerDataService) -> GamerRegisterRouter:
-    handler = GamerRegisterHandler(dispatcher.bot, gamer_data_service)
+    handler = GamerRegisterHandler(dispatcher, gamer_data_service)
     router = GamerRegisterRouter(handler)
     router.parent_router = dispatcher
     return router

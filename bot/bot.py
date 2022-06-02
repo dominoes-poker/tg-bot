@@ -11,7 +11,7 @@ class TGBot(Bot):
                                         ReplyKeyboardMarkup,
                                         ReplyKeyboardRemove,
                                     ]
-                                 ] = None,):
+                                 ] = ReplyKeyboardRemove,):
         return await self.send_message(
             chat_id=chat_id,
             text=text,

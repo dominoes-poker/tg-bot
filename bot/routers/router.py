@@ -2,6 +2,7 @@ from aiogram import Router
 from aiogram.types import TelegramObject, Message
 from aiogram.dispatcher.fsm.context import FSMContext
 
+from bot.context import TGContext
 from bot.types import EventCallbackType, IncommingMessage, IncommingMessageWrapper
 
 
@@ -16,5 +17,6 @@ class TGRouter(Router):
     def handler(self, event_callback: EventCallbackType):
         async def callback(tg_object: TelegramObject, state: FSMContext):
             message = self.create_message(tg_object)
-            return await event_callback(message, state)
+            context = TGContext.from_state(state)
+            return await event_callback(message, context)
         return callback

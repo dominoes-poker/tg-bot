@@ -1,0 +1,2 @@
+from bot.services.gamer_service.factory import get_gamer_data_service
+from bot.services.gamer_service.gamer_data_service import GamerDataService
