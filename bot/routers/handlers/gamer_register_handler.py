@@ -1,7 +1,7 @@
 import re
+from bot.bot import TGBot
 from bot.context import TGContext
 
-from bot.dispatcher import TGDispatcher
 from bot.routers.handlers.common.keyboards import ON_HOLD_KEYBOARD
 from bot.routers.handlers.handler import Handler
 from bot.services.gamer_service import GamerDataService
@@ -10,8 +10,8 @@ from bot.types import Gamer, IncommingMessage
 
 
 class GamerRegisterHandler(Handler):
-    def __init__(self, dispatcher: TGDispatcher, gamer_data_service: GamerDataService) -> None:
-        super().__init__(dispatcher)
+    def __init__(self, bot: TGBot, gamer_data_service: GamerDataService) -> None:
+        super().__init__(bot)
         self._gamer_data_service = gamer_data_service
         self._allow_name_pattern = re.compile(r'^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$')
 

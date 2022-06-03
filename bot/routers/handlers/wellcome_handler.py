@@ -1,7 +1,5 @@
-from aiogram.dispatcher.fsm.context import FSMContext
 from bot.bot import TGBot
 from bot.context import TGContext
-from bot.dispatcher import TGDispatcher
 from bot.routers.handlers.common.keyboards import ON_HOLD_KEYBOARD, YES_NO_KEYBOARD
 
 from bot.routers.handlers.handler import Handler
@@ -11,8 +9,8 @@ from bot.types import IncommingMessage
 
 
 class WellcomeHandler(Handler):
-    def __init__(self, dispatcher: TGDispatcher, gamer_data_service: GamerDataService) -> None:
-        super().__init__(dispatcher)
+    def __init__(self, bot: TGBot, gamer_data_service: GamerDataService) -> None:
+        super().__init__(bot)
         self._gamer_data_service: GamerDataService = gamer_data_service
 
     async def handle_enter(self, message: IncommingMessage, context: TGContext) -> None:

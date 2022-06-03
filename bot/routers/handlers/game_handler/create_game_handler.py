@@ -1,8 +1,8 @@
 import asyncio
 from typing import Iterable, List, Set
+from bot.bot import TGBot
 from bot.context import TGContext
 
-from bot.dispatcher import TGDispatcher
 from bot.routers.handlers.common.keyboards import YES_NO_KEYBOARD, keyboard_from_data
 from bot.routers.handlers.handler import Handler
 from bot.services.game_service import GameDataService
@@ -13,10 +13,10 @@ from bot.types.gamer import Game, Gamer
 
 
 class CreateGameHandler(Handler):
-    def __init__(self, dispatcher: TGDispatcher, 
+    def __init__(self, bot: TGBot, 
                  gamer_data_service: GamerDataService,
                  game_data_service: GameDataService) -> None:
-        super().__init__(dispatcher)
+        super().__init__(bot)
         self._gamer_data_service = gamer_data_service
         self._game_data_service = game_data_service
 

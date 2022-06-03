@@ -1,7 +1,7 @@
 from aiogram import F
+from bot.bot import TGBot
+from bot.routers.handlers.game_handler import CreateGameHandler
 
-from bot.dispatcher import TGDispatcher
-from bot.routers.handlers.game_handler.create_game_handler import CreateGameHandler
 from bot.routers.router import TGRouter
 from bot.services.game_service.game_data_service import GameDataService
 from bot.services.gamer_service import GamerDataService
@@ -22,9 +22,8 @@ class CreateGameRouter(TGRouter):
                               GameState.WAIT_ANSWER,  F.text.casefold() == 'yes')
 
 
-def create_game_maker_router(dispatcher: TGDispatcher,
-                       gamer_data_service: GamerDataService,
-                       game_data_service: GameDataService) -> CreateGameRouter:
-    handler = CreateGameHandler(dispatcher, gamer_data_service, game_data_service)
-    router = CreateGameRouter(handler)
-    return router
+def create_game_maker_router(bot: TGBot,
+                            gamer_data_service: GamerDataService,
+                            game_data_service: GameDataService) -> CreateGameRouter:
+    handler = CreateGameHandler(bot, gamer_data_service, game_data_service)
+    return CreateGameRouter(handler)

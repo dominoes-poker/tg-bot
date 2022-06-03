@@ -1,12 +1,11 @@
 
 from bot.bot import TGBot
-from bot.dispatcher import TGDispatcher
 
 
 class Handler:
-    def __init__(self, dispatcher: TGDispatcher) -> None:
-        self._dispatcher = dispatcher
+    def __init__(self, bot: TGBot) -> None:
+        self._bot = bot
 
     @property
     def bot(self) -> TGBot:
-        return self._dispatcher.bot
+        return self._bot
