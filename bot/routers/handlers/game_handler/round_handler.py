@@ -6,25 +6,29 @@ from bot.routers.handlers.common.keyboards import YES_NO_KEYBOARD, keyboard_from
 from bot.routers.handlers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
-from bot.services.player_service import PlayerDataService
+from bot.services.player_service import GamerDataService
 from bot.states import GameState
-from bot.types import IncommingMessage, Game, Player
+from bot.types import IncommingMessage, Game, Gamer
 
 
-class CreateGameHandler(Handler):
+class RoundHandler(Handler):
     def __init__(self, bot: TGBot, 
-                 player_data_service: PlayerDataService,
+                 player_data_service: GamerDataService,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
         self._player_data_service = player_data_service
         self._game_data_service = game_data_service
 
-    async def ask_gamer_usernames(self, message: IncommingMessage, context_service: ContextService) -> None:
+    async def ask_bet(self, message: IncommingMessage, context_service: ContextService) -> None:
+        owner = await context_service.get_gamer()
+        game = await self._game_data_service.create(owner)
+
+        await context_service.set_current_game(game)
         await self.bot.send(
             chat_id = message.chat.id,
-            text='Ok, let`s start a new game. Who will play? Send me usernames of all players (your too)',
+            text='Ok, let`s start a new game. Send me the names of players with comma separate',
         )
-        await context_service.set_state(GameState.WAIT_PLAYER_USERNAMES)
+        await context_service.set_state(GameState.ADD_GAMERS)
 
     async def handle_gamer_names(self, message: IncommingMessage, context_service: ContextService) -> None:
         gamer_names = self._process_names(message.text.split(','))
@@ -39,12 +43,12 @@ class CreateGameHandler(Handler):
         await context_service.set_state(GameState.WAIT_ANSWER)
         await self._invite_users(all_gamers, game, context_service)
 
-    async def _invite_users(self, gamers: List[Player], game: Game, context_service: ContextService):
+    async def _invite_users(self, gamers: List[Gamer], game: Game, context_service: ContextService):
         invites = [self._invite_user(gamer, game, context_service) for gamer in gamers ]
         await context_service.set_awaing_responses_from(gamers)
         await asyncio.gather(*invites)
     
-    async def _invite_user(self, gamer: Player, game: Game, context_service: ContextService):
+    async def _invite_user(self, gamer: Gamer, game: Game, context_service: ContextService):
         await self.bot.send(
             chat_id = gamer.identificator,
             text=f'{game.owner.username} invites you to a new game. Do you agree?',
@@ -70,7 +74,7 @@ class CreateGameHandler(Handler):
         current_game = await context_service.get_current_game()
         await self._set_agrement(gamer, current_game, context_service)
 
-    async def _set_agrement(self, gamer: Player, game: Game, context_service: ContextService):
+    async def _set_agrement(self, gamer: Gamer, game: Game, context_service: ContextService):
         owner_context_service = ContextService.for_user(context_service.context, game.owner.identificator)
         
         await owner_context_service.set_agrement(gamer)

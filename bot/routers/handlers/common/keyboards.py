@@ -10,10 +10,10 @@ YES_NO_KEYBOARD = ReplyKeyboardMarkup(
 )
 
 BUTTON_NEW_GAME = KeyboardButton(text='Start a new game')
-BUTTON_SHOW_STATISTICS = KeyboardButton(text='Show statistics')
+BUTTON_ADD_GAMER = KeyboardButton(text='Register my frined')
 
 ON_HOLD_KEYBOARD = ReplyKeyboardMarkup(
-    keyboard=[[BUTTON_NEW_GAME],[BUTTON_SHOW_STATISTICS]],
+    keyboard=[[BUTTON_NEW_GAME],[BUTTON_ADD_GAMER]],
     resize_keyboard=True,
 )
 

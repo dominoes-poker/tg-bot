@@ -4,10 +4,10 @@ from aiogram import Dispatcher
 
 from bot.bot import TGBot
 
-from bot.routers import TGRouter, create_wellcome_router, create_gamer_register_router
+from bot.routers import TGRouter, create_wellcome_router, create_player_register_router
 from bot.routers.game_router import create_root_game_router
 from bot.services.game_service.factory import get_game_data_service
-from bot.services.gamer_service import get_gamer_data_service
+from bot.services.player_service import get_player_data_service
 
 
 def create_bot(token: str) -> TGBot:
@@ -21,11 +21,11 @@ def create_dispatcher(bot: TGBot) -> Dispatcher:
     return dispatcher
 
 def create_routers(bot: TGBot) -> List[TGRouter]:
-    gamer_data_service = get_gamer_data_service()
+    player_data_service = get_player_data_service()
     game_data_service = get_game_data_service()
 
     return [
-        create_wellcome_router(bot, gamer_data_service),
-        create_gamer_register_router(bot, gamer_data_service),
-        create_root_game_router(bot, gamer_data_service, game_data_service)
+        create_wellcome_router(bot, player_data_service),
+        create_player_register_router(bot, player_data_service),
+        create_root_game_router(bot, player_data_service, game_data_service)
     ]

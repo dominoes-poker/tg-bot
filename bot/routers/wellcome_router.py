@@ -1,7 +1,7 @@
 from bot.bot import TGBot
 from bot.routers.handlers import WellcomeHandler
 from bot.routers.router import TGRouter
-from bot.services.gamer_service import GamerDataService
+from bot.services.player_service import PlayerDataService
 
 
 class WellcomeRouter(TGRouter):
@@ -12,6 +12,6 @@ class WellcomeRouter(TGRouter):
     def setup(self, handler: WellcomeHandler) -> None:
         self.message.register(self.handler(handler.handle_enter), commands=['start'])
 
-def create_wellcome_router(bot: TGBot, gamer_data_service: GamerDataService) -> WellcomeRouter:
-    handler = WellcomeHandler(bot, gamer_data_service)
+def create_wellcome_router(bot: TGBot, player_data_service: PlayerDataService) -> WellcomeRouter:
+    handler = WellcomeHandler(bot, player_data_service)
     return WellcomeRouter(handler)

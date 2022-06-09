@@ -15,5 +15,6 @@ class TGBot(Bot):
         return await self.send_message(
             chat_id=chat_id,
             text=text,
-            reply_markup=reply_markup
+            reply_markup=reply_markup,
+            parse_mode='Markdown',
         )

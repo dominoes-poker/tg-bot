@@ -1,14 +1,17 @@
 from aiogram.dispatcher.fsm.state import State, StatesGroup
 
 class RootState(StatesGroup):
-    GAMER_REGISTER = State()
-    ON_HOLD = State()
-    GAME = State()
+    TG_PLAYER_REGISTRATION = State()
+    ON_HOLD                = State()
+    GAME                   = State()
 
-class GamerRegisterState(StatesGroup):
-    WAIT_USERNAME = State()
+class TGPlayerRegisterState(StatesGroup):
+    WHAT_USERNMAE_USE = State()
+    WAIT_USERNAME   = State()
+
+class NewPlayerRegisterState(StatesGroup):
+    WAIT_USERNAME   = State()
 
 class GameState(StatesGroup):
-    ADD_GAMERS = State()
-    WAIT_GAMER_NAMES = State()
-    WAIT_ANSWER = State()
+    ADD_PLAYERS            = State()
+    WAIT_PLAYER_USERNAMES  = State()

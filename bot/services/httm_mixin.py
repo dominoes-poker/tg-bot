@@ -1,5 +1,7 @@
-from typing import Any, Callable, Dict
+from typing import Any, Dict
 import aiohttp
+
+from bot.services.loaders import Loader
 
 
 class RequestResult:
@@ -7,7 +9,7 @@ class RequestResult:
         self._data = data
 
 
-    def load(self, loader: Callable[[Dict], Any]) -> Any:
+    def load(self, loader: Loader) -> Any:
         return loader(self._data['data'])
 
 

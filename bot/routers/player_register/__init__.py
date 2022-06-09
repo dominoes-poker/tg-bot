@@ -1,0 +1,1 @@
+from bot.routers.player_register.player_register_router import PlayerRegisterRouter
