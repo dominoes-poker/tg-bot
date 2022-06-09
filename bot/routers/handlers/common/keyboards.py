@@ -17,6 +17,19 @@ ON_HOLD_KEYBOARD = ReplyKeyboardMarkup(
     resize_keyboard=True,
 )
 
+def keyboard_round(round_number: int) -> KeyboardButton:
+    number_to_text = (
+        'first', 'second'
+    )
+    button_text = f'Start the {number_to_text[round_number-1]}'
+    buttons = [[
+        KeyboardButton(text=button_text)
+        ]]
+    return ReplyKeyboardMarkup(
+        keyboard=buttons, 
+        resize_keyboard=True,
+    )
+
 def keyboard_from_data(data: List[str]) -> KeyboardButton:
     buttons = []
     for index, value in enumerate(data):

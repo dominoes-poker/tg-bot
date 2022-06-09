@@ -1,7 +1,7 @@
 from aiogram import F
 from bot.bot import TGBot
 
-from bot.routers.game_router.create_game_router import CreateGameRouter, create_game_maker_router
+from bot.routers.game.create_game_router import CreateGameRouter, create_game_maker_router
 from bot.routers.router import TGRouter
 from bot.services.game_service.game_data_service import GameDataService
 from bot.services.player_service import PlayerDataService

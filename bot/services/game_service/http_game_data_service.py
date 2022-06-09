@@ -16,10 +16,9 @@ class HTTPGameDataService(GameDataService, HTTPMixin):
     def game_api_url(self) -> str:
         return f'{self.api_url}/game'
 
-
-    async def create(self, owner: Player) -> Game:
+    async def create(self, players: List[Player]) -> Game:
         url = f'{self.game_api_url}'
-        body = {'ownerId': owner.id}
+        body = {'playerIds': [player.id for player in players]}
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, body, session)
         return result.load(loader=self._loader)

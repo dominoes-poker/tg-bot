@@ -18,7 +18,7 @@ class WellcomeHandler(Handler):
         name =message.chat.first_name
         reply_message = f'Nice to meet you, {name}! I am a bot that helps you manage the Poker on Bones game! '
 
-        player = await self._player_data_service.get_tg_player(identificator)
+        player = await self._player_data_service.get_player_by_identificator(identificator)
         if not player:
             reply_message += ' I have not found you in my annals of history. Can I register you as a new player?'
             reply_markup = YES_NO_KEYBOARD

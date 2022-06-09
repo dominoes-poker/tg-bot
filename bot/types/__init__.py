@@ -19,7 +19,6 @@ class Player:
 
 @dataclass
 class Game:
-    owner:   Player
     is_over: bool
     id:      Optional[int] = None
     players: List[Player] = None

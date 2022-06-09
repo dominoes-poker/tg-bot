@@ -5,7 +5,7 @@ from aiogram import Dispatcher
 from bot.bot import TGBot
 
 from bot.routers import TGRouter, create_wellcome_router, create_player_register_router
-from bot.routers.game_router import create_root_game_router
+from bot.routers.game import create_root_game_router
 from bot.services.game_service.factory import get_game_data_service
 from bot.services.player_service import get_player_data_service
 

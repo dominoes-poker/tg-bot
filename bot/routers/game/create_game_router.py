@@ -1,6 +1,7 @@
 from aiogram import F
 from bot.bot import TGBot
-from bot.routers.handlers.game_handler import CreateGameHandler
+from bot.routers.game.handlers import CreateGameHandler
+from bot.routers.handlers.common.keyboards import BUTTON_NEW_GAME
 
 from bot.routers.router import TGRouter
 from bot.services.game_service.game_data_service import GameDataService
@@ -14,10 +15,10 @@ class CreateGameRouter(TGRouter):
         self.setup(handler=handler)
 
     def setup(self, handler: CreateGameHandler) -> None:
-        self.message.register(self.handler(handler.ask_gamer_usernames), 
-                              RootState.ON_HOLD, F.text.casefold() == 'start a new game')
-        self.message.register(self.handler(handler.handle_gamer_names), 
-                              GameState.ADD_PLAYERS)
+        self.message.register(self.handler(handler.ask_player_usernames), 
+                              RootState.ON_HOLD, F.text == BUTTON_NEW_GAME.text)
+        self.message.register(self.handler(handler.handle_player_usernames), 
+                              GameState.WAIT_PLAYER_USERNAMES)
 
 
 def create_game_maker_router(bot: TGBot,

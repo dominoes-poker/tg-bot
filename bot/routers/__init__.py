@@ -1,3 +1,3 @@
 from bot.routers.router import TGRouter
 from bot.routers.player_register.player_register_router import PlayerRegisterRouter, create_player_register_router
-from bot.routers.wellcome_router import WellcomeRouter, create_wellcome_router
+from bot.routers.wellocme.wellcome_router import WellcomeRouter, create_wellcome_router
