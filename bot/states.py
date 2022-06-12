@@ -14,3 +14,4 @@ class NewPlayerRegisterState(StatesGroup):
 
 class GameState(StatesGroup):
     WAIT_PLAYER_USERNAMES  = State()
+    START_ROUND  = State()

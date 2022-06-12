@@ -31,11 +31,13 @@ class CreateGameHandler(Handler):
         if len(players) != len(player_usernames):
             ...
         game = await self._game_data_service.create(players=players)
+        await context_service.set_current_game_id(game)
         await self.bot.send(
             chat_id=message.user_id,
             text='Great! We are ready to start the first round',
             reply_markup=keyboard_round(1)
         )
+        await context_service.set_state(GameState.START_ROUND)
         
 
     @staticmethod

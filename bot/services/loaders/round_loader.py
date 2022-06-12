@@ -8,5 +8,5 @@ class RoundLoader(Loader):
     
     def __call__(self, data: Dict[Any, Any]) -> Round:
         return Round(
-            id=data['id']
+            id=data['id'],
         )

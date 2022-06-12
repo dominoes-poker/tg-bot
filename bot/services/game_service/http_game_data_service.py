@@ -4,7 +4,7 @@ import aiohttp
 from bot.services.game_service.game_data_service import GameDataService
 from bot.services.httm_mixin import HTTPMixin
 from bot.services.loaders.game_loader import GameLoader
-from bot.types import Player, Game
+from bot.types import Player, Game, Round
 
 
 class HTTPGameDataService(GameDataService, HTTPMixin):
@@ -17,16 +17,21 @@ class HTTPGameDataService(GameDataService, HTTPMixin):
         return f'{self.api_url}/game'
 
     async def create(self, players: List[Player]) -> Game:
-        url = f'{self.game_api_url}'
         body = {'playerIds': [player.id for player in players]}
         async with aiohttp.ClientSession() as session:
-            result = await self.post(url, body, session)
+            result = await self.post(self.game_api_url, body, session)
         return result.load(loader=self._loader)
 
-    async def add_gamers(self, gamer_ids: List[int], game: Game) -> Game:
-        url = f'{self.game_api_url}/{game.id}/add-gamers'
-        body = {'gamerIds': gamer_ids}        
+    async def get_game(self, game_id: int) -> Game:
+        url = f'{self.game_api_url}/{game_id}'
         async with aiohttp.ClientSession() as session:
-            result = await self.post(url, body, session)
+            result = await self.get(url, session)
         return result.load(loader=self._loader)
+
+    async def start_new_round(self, round: Round) -> Game:
+        url = f'{self.game_api_url}/{round.gameId}/new-round'
+        async with aiohttp.ClientSession() as session:
+            result = await self.post(url, round, session)
+        return result.load(loader=self._loader)
+
 

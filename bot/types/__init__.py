@@ -8,6 +8,10 @@ from .message import IncommingMessage, IncommingMessageWrapper
 
 @dataclass
 class Round:
+    gameId: int
+    numberOfDice: int
+    stakes: Optional[List] = None
+    number: Optional[int] = None
     id: Optional[int] = None
 
 
