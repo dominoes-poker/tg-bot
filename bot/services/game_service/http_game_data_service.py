@@ -1,11 +1,23 @@
-import asyncio
-from typing import Any, Callable, Dict, Generator, Optional, List
+
+from typing import List
 import aiohttp
 from bot.services.game_service.game_data_service import GameDataService
 from bot.services.httm_mixin import HTTPMixin
 from bot.services.loaders.game_loader import GameLoader
-from bot.types import Player, Game, Round
+from bot.types import Player, Game, Round, Stake
 
+
+def round_to_dict(round: Round) -> dict:
+    return {
+        'gameId': round.gameId,
+        'numberOfDice':round.numberOfDice,
+    }
+
+def stake_to_dict(stake: Stake) -> dict:
+    return {
+        'playerId': stake.playerId,
+        'bet':stake.bet,
+    }
 
 class HTTPGameDataService(GameDataService, HTTPMixin):
     def __init__(self, data_service_url: str, loader: GameLoader) -> None:
@@ -30,8 +42,16 @@ class HTTPGameDataService(GameDataService, HTTPMixin):
 
     async def start_new_round(self, round: Round) -> Game:
         url = f'{self.game_api_url}/{round.gameId}/new-round'
+        body = round_to_dict(round)
         async with aiohttp.ClientSession() as session:
-            result = await self.post(url, round, session)
+            result = await self.post(url, body, session)
+        return result.load(loader=self._loader.round_loader)
+    
+    async def player_makes_bet(self, game_id: int, stake: Stake) -> Game:
+        url = f'{self.game_api_url}/{game_id}/round/{stake.roundId}/make-bet'
+        body = stake_to_dict(stake)
+        async with aiohttp.ClientSession() as session:
+            result = await self.post(url, body, session)
         return result.load(loader=self._loader)
 
 

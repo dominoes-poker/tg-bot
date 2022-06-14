@@ -2,12 +2,13 @@ from aiogram import F
 from bot.bot import TGBot
 from bot.routers.game.handlers import CreateGameHandler
 from bot.routers.game.handlers.round_handler import RoundHandler
+from bot.routers.game.make_bets_router import create_make_bets_router
 from bot.routers.handlers.common.keyboards import BUTTON_NEW_GAME
 
 from bot.routers.router import TGRouter
 from bot.services.game_service.game_data_service import GameDataService
 from bot.services.player_service import PlayerDataService
-from bot.states import GameState, RootState
+from bot.states import GameState, RootState, RoundState
 
 
 class RoundRouter(TGRouter):
@@ -17,10 +18,12 @@ class RoundRouter(TGRouter):
 
     def setup(self, handler: RoundHandler) -> None:
         self.message.register(self.handler(handler.start_round), GameState.START_ROUND, F.text.regexp(r'Start the \w+ round'))
-
-
-def create_rpund_router(bot: TGBot,
+        
+def create_round_router(bot: TGBot,
                         player_data_service: PlayerDataService,
                         game_data_service: GameDataService) -> RoundRouter:
     handler = RoundHandler(bot, player_data_service, game_data_service)
-    return RoundRouter(handler)
+    router = RoundRouter(handler)
+    make_bet_router = create_make_bets_router(bot, player_data_service, game_data_service)
+    router.include_router(make_bet_router)
+    return router

@@ -1,6 +1,6 @@
 from typing import Callable, Dict, List, Optional
 from bot.services.loaders.game_loader import GameLoader
-from bot.types import Game, Player
+from bot.types import Game, Player, Stake
 from bot.services.data_service import DataService
 
 
@@ -16,4 +16,5 @@ class GameDataService(DataService):
     async def start_new_round(self, game_id: int) -> Game:
         raise NotImplementedError
 
-
+    async def player_makes_bet(self, game_id: int, stake: Stake) -> Game:
+        raise NotImplementedError

@@ -1,16 +1,23 @@
 
-from typing import Callable, List, Optional
-from aiogram.dispatcher.fsm.context import FSMContext
+from typing import List, Optional
 from attr import dataclass
 
 from .message import IncommingMessage, IncommingMessageWrapper
 
 
 @dataclass
+class Stake:
+    playerId: int
+    roundId: int
+    bet: int
+    id: Optional[int] = None
+
+
+@dataclass
 class Round:
     gameId: int
     numberOfDice: int
-    stakes: Optional[List] = None
+    stakes: Optional[List[Stake]] = None
     number: Optional[int] = None
     id: Optional[int] = None
 
@@ -28,3 +35,8 @@ class Game:
     players: List[Player] = None
     rounds:  List[Round] = None
 
+    @property
+    def last_round(self) -> Optional[Round]:
+        if self.rounds:
+            return sorted(self.rounds, key=lambda round: round.number)[0]
+        return None

@@ -15,3 +15,7 @@ class NewPlayerRegisterState(StatesGroup):
 class GameState(StatesGroup):
     WAIT_PLAYER_USERNAMES  = State()
     START_ROUND  = State()
+
+class RoundState(StatesGroup):
+    WAIT_USERNAME_TO_BET  = State()
+    WAIT_BET_OF_PLAYER  = State()
