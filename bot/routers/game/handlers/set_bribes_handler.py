@@ -1,5 +1,5 @@
 
-from typing import Generator, List, Optional
+from typing import List, Optional
 from bot.bot import TGBot
 
 from bot.routers.handlers.common.keyboards import SHOW_STATISTICS_KEYBOARD, keyboard_from_data
@@ -8,7 +8,7 @@ from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
 from bot.types import Game, IncommingMessage, Player
-from bot.states import RoundState, SetBribesState
+from bot.states import SetBribesState
 
 
 class SetBribesHandler(Handler):
