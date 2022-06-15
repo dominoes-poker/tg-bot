@@ -1,6 +1,9 @@
+from aiogram.dispatcher.fsm.context import FSMContext
+
 from bot.bot import TGBot
 from bot.routers.handlers import WellcomeHandler
 from bot.routers.router import TGRouter
+from bot.services.context_service.context_service import ContextService
 from bot.services.player_service import PlayerDataService
 
 
@@ -10,7 +13,7 @@ class WellcomeRouter(TGRouter):
         self.setup(handler=handler)
 
     def setup(self, handler: WellcomeHandler) -> None:
-        self.message.register(self.handler(handler.handle_enter), commands=['start'])
+        self.setup_handler(handler.handle_enter, commands=['start'])
 
 def create_wellcome_router(bot: TGBot, player_data_service: PlayerDataService) -> WellcomeRouter:
     handler = WellcomeHandler(bot, player_data_service)

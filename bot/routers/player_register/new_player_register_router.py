@@ -13,10 +13,8 @@ class NewPlayerRegisterRouter(TGRouter):
         self.setup(handler=handler)
 
     def setup(self, handler: NewPlayerRegisterHandler) -> None:
-        self.message.register(self.handler(handler.ask_username), 
-                              RootState.ON_HOLD, F.text.casefold() == BUTTON_ADD_GAMER.text.lower())
-        self.message.register(self.handler(handler.handle_username), 
-                              NewPlayerRegisterState.WAIT_USERNAME)
+        self.setup_handler(handler.ask_username, RootState.ON_HOLD, F.text.casefold() == BUTTON_ADD_GAMER.text.lower())
+        self.setup_handler(handler.handle_username, NewPlayerRegisterState.WAIT_USERNAME)
 
 
 def create_new_player_register_router(bot: TGBot,

@@ -39,4 +39,4 @@ class RoundHandler(Handler):
             numberOfDice=get_number_of_dices(game, next_round),
         )
         await self._game_data_service.start_new_round(new_round)
-        return await MakeBetsHandler(self._bot, self._player_data_service, self._game_data_service).ask_who_make_bet(message, context_service)
+        return await MakeBetsHandler(self._bot, self._game_data_service).ask_who_make_bet(message, context_service)

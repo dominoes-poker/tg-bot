@@ -35,7 +35,7 @@ class TGPlayerRegisterHandler(PlayerRegisterHandler):
         identificator = message.user_id
         if not self._allow_username_pattern.match(username):
             return self._bad_username_response(message.user_id)
-        
+
         await self._register_player(message.user_id, identificator, username, context_service)
 
     @staticmethod

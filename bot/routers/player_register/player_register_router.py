@@ -24,7 +24,7 @@ class PlayerRegisterRouter(TGRouter):
                 new_player_register_router: NewPlayerRegisterRouter) -> None:
         self.include_router(tg_player_register_router)
         self.include_router(new_player_register_router)
-        self.message.register(self.handler(root_player_register_handler.decline_registration), 
+        self.setup_handler(root_player_register_handler.decline_registration, 
                               RootState.TG_PLAYER_REGISTRATION, F.text.casefold() == BUTTON_NO.text.lower())
         
 

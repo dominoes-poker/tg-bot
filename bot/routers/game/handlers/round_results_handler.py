@@ -7,27 +7,31 @@ from bot.routers.handlers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
 from bot.services.player_service import PlayerDataService
-from bot.types import Game, IncommingMessage, Stake
+from bot.types import Game, IncommingMessage, Round, Stake
 from bot.states import RoundState
-from bot.routers.utils import get_number_of_dices
+from aiogram.types import ReplyKeyboardRemove
 
 
-class MakeBetsHandler(Handler):
-    def __init__(self, bot: TGBot,
+class RoundResultsHandler(Handler):
+    def __init__(self, bot: TGBot, 
+                 player_data_service: PlayerDataService,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
+        self._player_data_service = player_data_service
         self._game_data_service = game_data_service
     
 
-    async def ask_who_make_bet(self, message: IncommingMessage, context_service: ContextService) -> None:
+    async def ask_results(self, message: IncommingMessage, context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
         
-        next_players = self._get_players_to_bet(game)
+        last_round = game.last_round
         
+
+
         await self._bot.send(
             chat_id=message.user_id,
-            text=f'Who will make a bet?',
+            text=f'How many did {last_round}',
             reply_markup=keyboard_from_data(next_players)
         )
         await context_service.set_state(RoundState.WAIT_USERNAME_TO_BET)
@@ -35,14 +39,11 @@ class MakeBetsHandler(Handler):
     async def handle_username(self, message: IncommingMessage, context_service: ContextService) -> None:
         username = message.text
         await context_service.wait_bet_of(username)
-        
-        game_id = await context_service.get_current_game_id()
-        game = await self._game_data_service.get_game(game_id)
 
         await self._bot.send(
             chat_id=message.user_id,
             text=f'Whow many does {username} bet?',
-            reply_markup=keyboard_from_data(self._get_variants_to_bet(game))
+            reply_markup=keyboard_from_data(self._get_variants_to_bet())
         )
         await context_service.set_state(RoundState.WAIT_BET_OF_PLAYER)
 
@@ -68,8 +69,9 @@ class MakeBetsHandler(Handler):
             text=f'Everyone made a bet, now - play'
         )
 
-    def _get_variants_to_bet(self, game: Game) -> List[int]:
-        return list(range(get_number_of_dices(game, game.last_round.number)))
+
+    def _get_variants_to_bet(self,) -> List[int]:
+        return [0, 1]
 
     def _get_players_to_bet(self, game: Game) -> List[str]:
         if not game.rounds or not game.rounds[-1].stakes:

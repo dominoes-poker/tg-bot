@@ -13,14 +13,10 @@ class TGPlayerRegisterRouter(TGRouter):
         self.setup(handler=handler)
 
     def setup(self, handler: TGPlayerRegisterHandler) -> None:
-        self.message.register(self.handler(handler.new_player), 
-                              RootState.TG_PLAYER_REGISTRATION, F.text.casefold() == BUTTON_YES.text.lower())
-        self.message.register(self.handler(handler.use_tg_username), 
-                              TGPlayerRegisterState.WHAT_USERNMAE_USE, F.text.casefold() == BUTTON_YES.text.lower())
-        self.message.register(self.handler(handler.ask_new_username), 
-                              TGPlayerRegisterState.WHAT_USERNMAE_USE, F.text.casefold() == BUTTON_NO.text.lower())
-        self.message.register(self.handler(handler.use_new_username), 
-                              TGPlayerRegisterState.WAIT_USERNAME)
+        self.setup_handler(handler.new_player, RootState.TG_PLAYER_REGISTRATION, F.text.casefold() == BUTTON_YES.text.lower())
+        self.setup_handler(handler.use_tg_username, TGPlayerRegisterState.WHAT_USERNMAE_USE, F.text.casefold() == BUTTON_YES.text.lower())
+        self.setup_handler(handler.ask_new_username, TGPlayerRegisterState.WHAT_USERNMAE_USE, F.text.casefold() == BUTTON_NO.text.lower())
+        self.setup_handler(handler.use_new_username, TGPlayerRegisterState.WAIT_USERNAME)
 
 
 def create_tg_player_register_router(bot: TGBot,

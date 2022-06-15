@@ -17,7 +17,7 @@ class RoundRouter(TGRouter):
         self.setup(handler=handler)
 
     def setup(self, handler: RoundHandler) -> None:
-        self.message.register(self.handler(handler.start_round), GameState.START_ROUND, F.text.regexp(r'Start the \w+ round'))
+        self.setup_handler(handler.start_round, GameState.START_ROUND, F.text.regexp(r'Start the \w+ round'))
         
 def create_round_router(bot: TGBot,
                         player_data_service: PlayerDataService,
