@@ -27,9 +27,22 @@ class CreateGameHandler(Handler):
 
     async def handle_player_usernames(self, message: IncommingMessage, context_service: ContextService) -> None:
         player_usernames = self._process_names(message.text.split(','))
+        player = await self._player_data_service.get_player_by_identificator(message.user_id)
+        player_usernames.add(player.username)
+        
+        if len(player_usernames) < 2:
+            return await self.bot.send(
+                chat_id=message.user_id,
+                text=f'At least two players must be participants at game. Please, try again.'
+            )
         players = await self._player_data_service.get_players_by_username(player_usernames)
         if len(players) != len(player_usernames):
-            ...
+            found_usernams = {player.username for player in players}
+            strange_usernames = filter(lambda username: username not in found_usernams, player_usernames)
+            return await self.bot.send(
+                chat_id=message.user_id,
+                text=f'I could not find users: `{"`, `".join(strange_usernames)}`. Please, check and send correct'
+            )
         game = await self._game_data_service.create(players=players)
         await context_service.set_current_game_id(game)
         await self.bot.send(

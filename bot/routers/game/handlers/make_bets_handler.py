@@ -33,11 +33,14 @@ class MakeBetsHandler(Handler):
         await context_service.set_state(RoundState.WAIT_USERNAME_TO_BET)
     
     async def handle_username(self, message: IncommingMessage, context_service: ContextService) -> None:
-        username = message.text
-        await context_service.wait_bet_of(username)
         
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
+
+        username = message.text
+        player = next(filter(lambda player: player.username==username, game.players))
+        await context_service.wait_bet_of(player)
+        
 
         await self._bot.send(
             chat_id=message.user_id,

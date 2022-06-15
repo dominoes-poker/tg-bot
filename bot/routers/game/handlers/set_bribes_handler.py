@@ -7,8 +7,7 @@ from bot.routers.handlers.handler import Handler
 from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
-from bot.services.player_service import PlayerDataService
-from bot.types import Game, IncommingMessage, Player, Stake, message
+from bot.types import Game, IncommingMessage, Player
 from bot.states import RoundState
 
 
@@ -17,23 +16,19 @@ class SetBribesHandler(Handler):
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
         self._game_data_service = game_data_service
-    
 
     async def ask_results(self, message: IncommingMessage, context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
         player = self._get_player_to_ask_results(game)
+        
         if not player:
-            return await self._bot.send(
-                chat_id=message.user_id,
-                text=f'The round has finished',
-                reply_markup=SHOW_STATISTICS_KEYBOARD
-                )
-            # return await context_service.set_state(0)
+            return await self._finish(message, context_service)
+
         await context_service.wait_bribe_of(player)
         await self._bot.send(
             chat_id=message.user_id,
-            text=f'How many did {player} get in the round?',
+            text=f'How many did {player.username} get in the round?',
             reply_markup=keyboard_from_data(self._get_results_variants(game))
         )
         await context_service.set_state(RoundState.WAIT_RESULT_OF_PLAYER)
@@ -54,6 +49,12 @@ class SetBribesHandler(Handler):
         
         return await self.ask_results(message, context_service)
 
+    async def _finish(self, message: IncommingMessage, context_service: ContextService) -> None:
+        return await self._bot.send(
+                chat_id=message.user_id,
+                text=f'The round has finished',
+                reply_markup=SHOW_STATISTICS_KEYBOARD
+                )
 
     def _get_results_variants(self, game: Game) -> List[int]:
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
@@ -67,12 +68,12 @@ class SetBribesHandler(Handler):
     def _get_player_to_ask_results(self, game: Game) -> Optional[Player]:
         if not game.rounds or not game.last_round.stakes:
             return [player.username for player in game.players]
-        stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
+        stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id, reverse=True)
         players_ask_results = {stake.playerId for stake in stakes if stake.bribe is None}
         
         for player in game.players:
             if player.id in players_ask_results:
-                return player.username
+                return player
         return None
         
         
