@@ -14,8 +14,8 @@ class TGPlayerRegisterRouter(TGRouter):
 
     def setup(self, handler: TGPlayerRegisterHandler) -> None:
         self.setup_handler(handler.new_player, RootState.TG_PLAYER_REGISTRATION, F.text.casefold() == BUTTON_YES.text.lower())
-        self.setup_handler(handler.use_tg_username, TGPlayerRegisterState.WHAT_USERNMAE_USE, F.text.casefold() == BUTTON_YES.text.lower())
-        self.setup_handler(handler.ask_new_username, TGPlayerRegisterState.WHAT_USERNMAE_USE, F.text.casefold() == BUTTON_NO.text.lower())
+        self.setup_handler(handler.use_tg_username, TGPlayerRegisterState.WHAT_USERNAME_USE, F.text.casefold() == BUTTON_YES.text.lower())
+        self.setup_handler(handler.ask_new_username, TGPlayerRegisterState.WHAT_USERNAME_USE, F.text.casefold() == BUTTON_NO.text.lower())
         self.setup_handler(handler.use_new_username, TGPlayerRegisterState.WAIT_USERNAME)
 
 

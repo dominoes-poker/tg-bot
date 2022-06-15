@@ -8,7 +8,7 @@ from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
 from bot.types import Game, IncommingMessage, Player
-from bot.states import RoundState
+from bot.states import RoundState, SetBribesState
 
 
 class SetBribesHandler(Handler):
@@ -28,10 +28,10 @@ class SetBribesHandler(Handler):
         await context_service.wait_bribe_of(player)
         await self._bot.send(
             chat_id=message.user_id,
-            text=f'How many did {player.username} get in the round?',
+            text=f'How many did `{player.username}` get in the round?',
             reply_markup=keyboard_from_data(self._get_results_variants(game))
         )
-        await context_service.set_state(RoundState.WAIT_RESULT_OF_PLAYER)
+        await context_service.set_state(SetBribesState.BRIBE)
 
     async def handle_result(self, message: IncommingMessage, context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
@@ -54,7 +54,7 @@ class SetBribesHandler(Handler):
                 chat_id=message.user_id,
                 text=f'The round has finished',
                 reply_markup=SHOW_STATISTICS_KEYBOARD
-                )
+        )
 
     def _get_results_variants(self, game: Game) -> List[int]:
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)

@@ -6,19 +6,24 @@ class RootState(StatesGroup):
     GAME                   = State()
 
 class TGPlayerRegisterState(StatesGroup):
-    WHAT_USERNMAE_USE = State()
-    WAIT_USERNAME   = State()
+    WHAT_USERNAME_USE = State()
+    WAIT_USERNAME = State()
 
 class NewPlayerRegisterState(StatesGroup):
-    WAIT_USERNAME   = State()
+    WAIT_USERNAME = State()
 
 class GameState(StatesGroup):
-    WAIT_PLAYER_USERNAMES  = State()
-    START_ROUND  = State()
-    FINISH_ROUND  = State()
+    WAIT_PLAYER_USERNAMES = State()
 
 class RoundState(StatesGroup):
-    WAIT_USERNAME_TO_BET  = State()
-    WAIT_BET_OF_PLAYER  = State()
-    WAIT_RESULT_OF_PLAYER  = State()
+    START  = State()
+    BETS  = State()
+    BRIBES  = State()
+
+class MakeBetsState(StatesGroup):
+    USERNAME  = State()
+    BET  = State()
+
+class SetBribesState(StatesGroup):
+    BRIBE = State()
     

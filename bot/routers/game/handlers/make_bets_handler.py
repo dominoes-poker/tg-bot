@@ -6,9 +6,8 @@ from bot.routers.handlers.common.keyboards import ENTER_ROUND_RESULTS_KEYBOARD, 
 from bot.routers.handlers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
-from bot.services.player_service import PlayerDataService
 from bot.types import Game, IncommingMessage, Stake
-from bot.states import GameState, RoundState
+from bot.states import MakeBetsState, RoundState
 from bot.routers.utils import get_number_of_dices
 
 
@@ -30,7 +29,7 @@ class MakeBetsHandler(Handler):
             text=f'Who will make a bet?',
             reply_markup=keyboard_from_data(next_players)
         )
-        await context_service.set_state(RoundState.WAIT_USERNAME_TO_BET)
+        await context_service.set_state(MakeBetsState.USERNAME)
     
     async def handle_username(self, message: IncommingMessage, context_service: ContextService) -> None:
         
@@ -41,13 +40,12 @@ class MakeBetsHandler(Handler):
         player = next(filter(lambda player: player.username==username, game.players))
         await context_service.wait_bet_of(player)
         
-
         await self._bot.send(
             chat_id=message.user_id,
             text=f'Whow many does {username} bet?',
             reply_markup=keyboard_from_data(self._get_variants_to_bet(game))
         )
-        await context_service.set_state(RoundState.WAIT_BET_OF_PLAYER)
+        await context_service.set_state(MakeBetsState.BET)
 
 
     async def handle_bet(self, message: IncommingMessage, context_service: ContextService) -> None:
@@ -71,7 +69,7 @@ class MakeBetsHandler(Handler):
             text=f'Everyone made a bet, now - play',
             reply_markup=ENTER_ROUND_RESULTS_KEYBOARD
         )
-        await context_service.set_state(GameState.FINISH_ROUND)
+        await context_service.set_state(RoundState.BRIBES)
 
     def _get_variants_to_bet(self, game: Game) -> List[int]:
         return list(range(get_number_of_dices(game, game.last_round.number)))

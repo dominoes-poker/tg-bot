@@ -6,7 +6,7 @@ from bot.routers.handlers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
 from bot.services.player_service import PlayerDataService
-from bot.states import GameState
+from bot.states import GameState, RoundState
 from bot.types import IncommingMessage
 
 
@@ -50,7 +50,7 @@ class CreateGameHandler(Handler):
             text='Great! We are ready to start the first round',
             reply_markup=keyboard_round(1)
         )
-        await context_service.set_state(GameState.START_ROUND)
+        await context_service.set_state(RoundState.START)
         
 
     @staticmethod

@@ -1,10 +1,10 @@
 from aiogram import F
+
 from bot.bot import TGBot
 from bot.routers.game.handlers.set_bribes_handler import SetBribesHandler
-
 from bot.routers.router import TGRouter
 from bot.services.game_service.game_data_service import GameDataService
-from bot.states import RoundState
+from bot.states import SetBribesState
 
 
 class SetBribesRouter(TGRouter):
@@ -18,7 +18,7 @@ class SetBribesRouter(TGRouter):
         return self._handler
 
     def setup(self, handler: SetBribesHandler) -> None:
-        self.setup_handler(handler.handle_result, RoundState.WAIT_RESULT_OF_PLAYER, F.text.regexp(r'\d+'))
+        self.setup_handler(handler.handle_result, SetBribesState.BRIBE, F.text.regexp(r'\d+'))
 
 
 def create_set_bribes_router(bot: TGBot,
