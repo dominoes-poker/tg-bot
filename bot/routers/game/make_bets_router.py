@@ -9,10 +9,15 @@ from bot.services.player_service import PlayerDataService
 from bot.states import GameState, RoundState
 
 
-class GetBetsRouter(TGRouter):
+class MakeBetsRouter(TGRouter):
     def __init__(self, handler: MakeBetsHandler) -> None:
-        super().__init__(use_builtin_filters=True, name='RoundRouter')
+        super().__init__(use_builtin_filters=True, name='MakeBetsRouter')
         self.setup(handler=handler)
+        self._handler = handler
+    
+    @property
+    def handler(self) -> MakeBetsHandler:
+        return self._handler
 
     def setup(self, handler: MakeBetsHandler) -> None:
         self.setup_handler(handler.ask_who_make_bet, GameState.START_ROUND, F.text.regexp(r'Start the \w+ round'))
@@ -21,7 +26,6 @@ class GetBetsRouter(TGRouter):
 
 
 def create_make_bets_router(bot: TGBot,
-                        player_data_service: PlayerDataService,
-                        game_data_service: GameDataService) -> GetBetsRouter:
+                            game_data_service: GameDataService) -> MakeBetsRouter:
     handler = MakeBetsHandler(bot, game_data_service)
-    return GetBetsRouter(handler)
+    return MakeBetsRouter(handler)

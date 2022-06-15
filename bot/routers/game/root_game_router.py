@@ -19,6 +19,6 @@ def create_root_game_router(bot: TGBot,
     router = RootGameRouter()
     add_gamers_router: CreateGameRouter = create_game_maker_router(bot, player_data_service, game_data_service)
     router.include_router(add_gamers_router)
-    round_router = create_round_router(bot, player_data_service, game_data_service)
+    round_router = create_round_router(bot, game_data_service)
     router.include_router(round_router)
     return router

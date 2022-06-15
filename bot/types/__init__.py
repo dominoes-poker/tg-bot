@@ -10,6 +10,7 @@ class Stake:
     playerId: int
     roundId: int
     bet: int
+    bribe: Optional[int] = None
     id: Optional[int] = None
 
 

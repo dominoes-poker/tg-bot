@@ -17,6 +17,7 @@ def stake_to_dict(stake: Stake) -> dict:
     return {
         'playerId': stake.playerId,
         'bet':stake.bet,
+        'bribe':stake.bribe,
     }
 
 class HTTPGameDataService(GameDataService, HTTPMixin):
@@ -47,11 +48,18 @@ class HTTPGameDataService(GameDataService, HTTPMixin):
             result = await self.post(url, body, session)
         return result.load(loader=self._loader.round_loader)
     
-    async def player_makes_bet(self, game_id: int, stake: Stake) -> Game:
-        url = f'{self.game_api_url}/{game_id}/round/{stake.roundId}/make-bet'
+    async def set_bet(self, game_id: int, stake: Stake) -> Game:
+        url = f'{self.game_api_url}/{game_id}/round/{stake.roundId}/bet'
         body = stake_to_dict(stake)
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, body, session)
+        return result.load(loader=self._loader)   
+
+    async def set_bribe(self, game_id: int, stake: Stake) -> Game:
+        url = f'{self.game_api_url}/{game_id}/round/{stake["roundId"]}/bribe'
+        
+        async with aiohttp.ClientSession() as session:
+            result = await self.post(url, stake, session)
         return result.load(loader=self._loader)
 
 

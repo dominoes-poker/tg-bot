@@ -42,3 +42,18 @@ def keyboard_from_data(data: List[str]) -> KeyboardButton:
         keyboard=buttons, 
         resize_keyboard=True,
     )
+
+
+BUTTON_ENTER_ROUND_RESULTS = KeyboardButton(text='Enter results for the round')
+
+ENTER_ROUND_RESULTS_KEYBOARD = ReplyKeyboardMarkup(
+    keyboard=[[BUTTON_ENTER_ROUND_RESULTS]],
+    resize_keyboard=True,
+)
+
+SHOW_STATISTICS_BUTTON = KeyboardButton(text='Show Statistics')
+
+SHOW_STATISTICS_KEYBOARD = ReplyKeyboardMarkup(
+    keyboard=[[SHOW_STATISTICS_BUTTON]],
+    resize_keyboard=True,
+)

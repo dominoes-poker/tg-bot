@@ -2,13 +2,13 @@
 from typing import List
 from bot.bot import TGBot
 
-from bot.routers.handlers.common.keyboards import keyboard_from_data
+from bot.routers.handlers.common.keyboards import ENTER_ROUND_RESULTS_KEYBOARD, keyboard_from_data
 from bot.routers.handlers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
 from bot.services.player_service import PlayerDataService
 from bot.types import Game, IncommingMessage, Stake
-from bot.states import RoundState
+from bot.states import GameState, RoundState
 from bot.routers.utils import get_number_of_dices
 
 
@@ -57,24 +57,26 @@ class MakeBetsHandler(Handler):
         stake = Stake(
             playerId=player.id,
             bet = int(message.text),
-            roundId=1,
+            roundId=game.last_round.number,
         )
-        game = await self._game_data_service.player_makes_bet(game_id, stake)
+        game = await self._game_data_service.set_bet(game_id, stake)
         if len(game.last_round.stakes) < len(game.players):
             return await self.ask_who_make_bet(message, context_service)
         
         await self._bot.send(
             chat_id=message.user_id,
-            text=f'Everyone made a bet, now - play'
+            text=f'Everyone made a bet, now - play',
+            reply_markup=ENTER_ROUND_RESULTS_KEYBOARD
         )
+        await context_service.set_state(GameState.FINISH_ROUND)
 
     def _get_variants_to_bet(self, game: Game) -> List[int]:
         return list(range(get_number_of_dices(game, game.last_round.number)))
 
     def _get_players_to_bet(self, game: Game) -> List[str]:
-        if not game.rounds or not game.rounds[-1].stakes:
+        if not game.rounds or not game.last_round.stakes:
             return [player.username for player in game.players]
-        players_made_bets = {stake.playerId for stake in game.rounds[-1].stakes}
+        players_made_bets = {stake.playerId for stake in game.last_round.stakes}
         return [
             player.username 
             for player in game.players 

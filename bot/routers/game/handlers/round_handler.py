@@ -2,22 +2,24 @@
 from typing import List
 from bot.bot import TGBot
 from bot.routers.game.handlers.make_bets_handler import MakeBetsHandler
+from bot.routers.game.handlers.set_bribes_handler import SetBribesHandler
 
 from bot.routers.handlers.handler import Handler
 from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
-from bot.services.player_service import PlayerDataService
 from bot.types import Game, IncommingMessage, Round
 
 
 class RoundHandler(Handler):
-    def __init__(self, bot: TGBot, 
-                 player_data_service: PlayerDataService,
+    def __init__(self, bot: TGBot,
+                make_bets_handler: MakeBetsHandler,
+                set_bribes_handler: SetBribesHandler,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
-        self._player_data_service = player_data_service
         self._game_data_service = game_data_service
+        self._make_bets_handler = make_bets_handler
+        self._set_bribes_handler = set_bribes_handler
 
     def _get_next_round_number(self, game: Game) -> int:
         if game.rounds:
@@ -39,4 +41,7 @@ class RoundHandler(Handler):
             numberOfDice=get_number_of_dices(game, next_round),
         )
         await self._game_data_service.start_new_round(new_round)
-        return await MakeBetsHandler(self._bot, self._game_data_service).ask_who_make_bet(message, context_service)
+        return await self._make_bets_handler.ask_who_make_bet(message, context_service)
+
+    async def finish_round(self, message: IncommingMessage, context_service: ContextService) -> None:
+        return await self._set_bribes_handler.ask_results(message, context_service)

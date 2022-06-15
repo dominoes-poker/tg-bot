@@ -1,14 +1,13 @@
 from aiogram import F
 from bot.bot import TGBot
-from bot.routers.game.handlers import CreateGameHandler
 from bot.routers.game.handlers.round_handler import RoundHandler
 from bot.routers.game.make_bets_router import create_make_bets_router
-from bot.routers.handlers.common.keyboards import BUTTON_NEW_GAME
+from bot.routers.game.set_birbes_router import create_set_bribes_router
+from bot.routers.handlers.common.keyboards import BUTTON_ENTER_ROUND_RESULTS
 
 from bot.routers.router import TGRouter
 from bot.services.game_service.game_data_service import GameDataService
-from bot.services.player_service import PlayerDataService
-from bot.states import GameState, RootState, RoundState
+from bot.states import GameState
 
 
 class RoundRouter(TGRouter):
@@ -18,12 +17,17 @@ class RoundRouter(TGRouter):
 
     def setup(self, handler: RoundHandler) -> None:
         self.setup_handler(handler.start_round, GameState.START_ROUND, F.text.regexp(r'Start the \w+ round'))
+        self.setup_handler(handler.finish_round, GameState.FINISH_ROUND, F.text == BUTTON_ENTER_ROUND_RESULTS.text)
         
 def create_round_router(bot: TGBot,
-                        player_data_service: PlayerDataService,
                         game_data_service: GameDataService) -> RoundRouter:
-    handler = RoundHandler(bot, player_data_service, game_data_service)
+    
+    make_bet_router = create_make_bets_router(bot, game_data_service)
+    set_birbes_router = create_set_bribes_router(bot, game_data_service)
+    
+    handler = RoundHandler(bot, make_bet_router.handler, set_birbes_router.handler, game_data_service)
     router = RoundRouter(handler)
-    make_bet_router = create_make_bets_router(bot, player_data_service, game_data_service)
+    
     router.include_router(make_bet_router)
+    router.include_router(set_birbes_router)
     return router

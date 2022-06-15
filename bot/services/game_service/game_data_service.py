@@ -16,5 +16,8 @@ class GameDataService(DataService):
     async def start_new_round(self, game_id: int) -> Game:
         raise NotImplementedError
 
-    async def player_makes_bet(self, game_id: int, stake: Stake) -> Game:
+    async def set_bet(self, game_id: int, stake: Stake) -> Game:
+        raise NotImplementedError
+
+    async def set_bribe(self, game_id: int, stake: Stake) -> Game:
         raise NotImplementedError

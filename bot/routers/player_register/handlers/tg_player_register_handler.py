@@ -15,7 +15,7 @@ class TGPlayerRegisterHandler(PlayerRegisterHandler):
         
         await self.bot.send(
             chat_id = message.user_id,
-            text=f'Do you want to be registered as {username}?',
+            text=f'Do you want to be registered as `{username}`?',
             reply_markup=YES_NO_KEYBOARD
         )
         return await context_service.set_state(TGPlayerRegisterState.WHAT_USERNMAE_USE)

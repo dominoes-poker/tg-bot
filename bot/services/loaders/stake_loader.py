@@ -11,5 +11,6 @@ class StakeLoader(Loader):
             id=data['id'],
             roundId=data['roundId'],
             playerId=data['playerId'],
-            bet=data['bet']
+            bet=data['bet'],
+            bribe=data['bribe']
         )
