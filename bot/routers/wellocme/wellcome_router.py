@@ -3,7 +3,6 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from bot.bot import TGBot
 from bot.routers.handlers import WellcomeHandler
 from bot.routers.router import TGRouter
-from bot.services.context_service.context_service import ContextService
 from bot.services.player_service import PlayerDataService
 
 

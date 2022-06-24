@@ -1,4 +1,4 @@
-from bot.common import SingletonMetaClass
+from common import SingletonMetaClass
 from bot.services.loaders.loader import Loader
 
 

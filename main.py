@@ -1,14 +1,13 @@
 import asyncio
 import logging
-import os
 import sys
-from bot.factory import create_bot, create_dispatcher
+from config import create_config, ConfigType
+from bot import TGBot, BotFactory
 
 async def main():
-    API_TOKEN = os.getenv('TOKEN')
-    bot = create_bot(API_TOKEN)
-    dispatcher = create_dispatcher(bot)
-    await dispatcher.start_polling(bot)
+    config = create_config(ConfigType.ENV)
+    bot: TGBot = BotFactory().create_bot(config)
+    await bot.start_polling()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
