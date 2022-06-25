@@ -21,19 +21,18 @@ class Config(metaclass=SingletonMetaClass):
         raise NotImplementedError('The method to get variable is not implemented')
 
     @classmethod
-    def _get_token(cls, *args, **kwargs) -> str:
+    def _get_token(cls) -> str:
         return cls._get_required_var('TOKEN')
-   
+
     @classmethod
-    def _get_data_service_url(cls, *args, **kwargs) -> str:
+    def _get_data_service_url(cls) -> str:
         return cls._get_required_var('DATA_SERVICE_URL')
 
 
-class EnvConfig(Config): 
+class EnvConfig(Config):
     @staticmethod
     def _get_required_var(env_variable_name: str) -> str:
         value = os.getenv(env_variable_name)
         if value is None:
             raise ValueError(f'The {env_variable_name} variable isnot set')
         return value
-

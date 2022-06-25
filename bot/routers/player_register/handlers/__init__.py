@@ -1,3 +1,0 @@
-from bot.routers.player_register.handlers.new_player_register_handler import NewPlayerRegisterHandler
-from bot.routers.player_register.handlers.tg_player_register_handler import TGPlayerRegisterHandler
-from bot.routers.player_register.handlers.player_register_handler import PlayerRegisterHandler

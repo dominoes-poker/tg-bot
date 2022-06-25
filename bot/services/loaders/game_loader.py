@@ -7,12 +7,12 @@ from bot.types import Game
 
 
 class GameLoader(Loader):
-    def __init__(self, player_loader: PlayerLoader, 
+    def __init__(self, player_loader: PlayerLoader,
                        round_loader: RoundLoader):
         super().__init__()
         self._player_loader = player_loader
         self._round_loader = round_loader
-    
+
     @property
     def round_loader(self) -> RoundLoader:
         return self._round_loader

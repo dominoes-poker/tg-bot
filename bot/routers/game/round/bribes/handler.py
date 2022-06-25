@@ -2,8 +2,8 @@
 from typing import List, Optional
 from bot.bot import TGBot
 
-from bot.routers.handlers.common.keyboards import SHOW_STATISTICS_KEYBOARD, keyboard_from_data
-from bot.routers.handlers.handler import Handler
+from bot.routers.common.keyboards import SHOW_STATISTICS_KEYBOARD, keyboard_from_data
+from bot.routers.handler import Handler
 from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
@@ -11,9 +11,8 @@ from bot.types import Game, IncommingMessage, Player
 from bot.states import SetBribesState
 
 
-class SetBribesHandler(Handler):
-    def __init__(self, bot: TGBot,
-                 game_data_service: GameDataService) -> None:
+class BribesHandler(Handler):
+    def __init__(self, bot: TGBot, game_data_service: GameDataService) -> None:
         super().__init__(bot)
         self._game_data_service = game_data_service
 
@@ -31,7 +30,7 @@ class SetBribesHandler(Handler):
             text=f'How many did `{player.username}` get in the round?',
             reply_markup=keyboard_from_data(self._get_results_variants(game))
         )
-        await context_service.set_state(SetBribesState.BRIBE)
+        return SetBribesState.BRIBE
 
     async def handle_result(self, message: IncommingMessage, context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()

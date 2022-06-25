@@ -41,9 +41,9 @@ class HTTPGameDataService(GameDataService, HTTPMixin):
             result = await self.get(url, session)
         return result.load(loader=self._loader)
 
-    async def start_new_round(self, round: Round) -> Game:
-        url = f'{self.game_api_url}/{round.gameId}/new-round'
-        body = round_to_dict(round)
+    async def start_new_round(self, round_: Round) -> Game:
+        url = f'{self.game_api_url}/{round_.gameId}/new-round'
+        body = round_to_dict(round_)
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, body, session)
         return result.load(loader=self._loader.round_loader)

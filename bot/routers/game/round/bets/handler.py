@@ -1,17 +1,18 @@
 
 from typing import List
-from bot.bot import TGBot
 
-from bot.routers.handlers.common.keyboards import ENTER_ROUND_RESULTS_KEYBOARD, keyboard_from_data
-from bot.routers.handlers.handler import Handler
+from bot.bot import TGBot
+from bot.routers.common.keyboards import (ENTER_ROUND_RESULTS_KEYBOARD,
+                                          keyboard_from_data)
+from bot.routers.handler import Handler
+from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
-from bot.types import Game, IncommingMessage, Stake
 from bot.states import MakeBetsState, RoundState
-from bot.routers.utils import get_number_of_dices
+from bot.types import Game, IncommingMessage, Stake
 
 
-class MakeBetsHandler(Handler):
+class BetsHandler(Handler):
     def __init__(self, bot: TGBot,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
@@ -29,7 +30,7 @@ class MakeBetsHandler(Handler):
             text=f'Who will make a bet?',
             reply_markup=keyboard_from_data(next_players)
         )
-        await context_service.set_state(MakeBetsState.USERNAME)
+        return MakeBetsState.USERNAME
     
     async def handle_username(self, message: IncommingMessage, context_service: ContextService) -> None:
         
@@ -45,7 +46,7 @@ class MakeBetsHandler(Handler):
             text=f'Whow many does {username} bet?',
             reply_markup=keyboard_from_data(self._get_variants_to_bet(game))
         )
-        await context_service.set_state(MakeBetsState.BET)
+        return MakeBetsState.BET
 
 
     async def handle_bet(self, message: IncommingMessage, context_service: ContextService) -> None:
@@ -69,7 +70,7 @@ class MakeBetsHandler(Handler):
             text=f'Everyone made a bet, now - play',
             reply_markup=ENTER_ROUND_RESULTS_KEYBOARD
         )
-        await context_service.set_state(RoundState.BRIBES)
+        return RoundState.BRIBES
 
     def _get_variants_to_bet(self, game: Game) -> List[int]:
         return list(range(get_number_of_dices(game, game.last_round.number)))

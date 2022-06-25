@@ -5,11 +5,11 @@ class RootState(StatesGroup):
     ON_HOLD                = State()
     GAME                   = State()
 
-class TGPlayerRegisterState(StatesGroup):
+class TelegramPlayerRegisterState(StatesGroup):
     WHAT_USERNAME_USE = State()
     WAIT_USERNAME = State()
 
-class NewPlayerRegisterState(StatesGroup):
+class ExternalPlayerRegisterState(StatesGroup):
     WAIT_USERNAME = State()
 
 class GameState(StatesGroup):
@@ -26,4 +26,3 @@ class MakeBetsState(StatesGroup):
 
 class SetBribesState(StatesGroup):
     BRIBE = State()
-    

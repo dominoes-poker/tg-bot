@@ -5,7 +5,7 @@ from bot.types import Player
 
 
 class PlayerLoader(Loader):
-    
+
     def __call__(self, data: Dict[Any, Any]) -> Any:
         return Player(
             id=data['id'],

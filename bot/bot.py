@@ -2,7 +2,7 @@ from typing import Optional, Union
 from aiogram import Bot, Dispatcher
 from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
 
-REPLY_MARKUP_TYPE = Union[ReplyKeyboardMarkup, ReplyKeyboardRemove]
+ReplyMarkupType = Union[ReplyKeyboardMarkup, ReplyKeyboardRemove]
 
 class TGBot(Bot):
     def __init__(self, token: str) -> None:
@@ -20,7 +20,7 @@ class TGBot(Bot):
     async def send(self,
                    chat_id: int,
                    text: str,
-                   reply_markup: Optional[REPLY_MARKUP_TYPE] = ReplyKeyboardRemove,):
+                   reply_markup: Optional[ReplyMarkupType] = ReplyKeyboardRemove,):
         return await self.send_message(
             chat_id=chat_id,
             text=text,
@@ -32,4 +32,3 @@ class TGBot(Bot):
         if not self.dispatcher:
             raise RuntimeError('Dispatcher was not added to the bot')
         return await self.dispatcher.start_polling(self)
-

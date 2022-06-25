@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import sys
+
 from config import create_config, ConfigType
 from bot import TGBot, BotFactory
 

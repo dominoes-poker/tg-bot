@@ -26,7 +26,7 @@ def keyboard_round(round_number: int) -> KeyboardButton:
         KeyboardButton(text=button_text)
         ]]
     return ReplyKeyboardMarkup(
-        keyboard=buttons, 
+        keyboard=buttons,
         resize_keyboard=True,
     )
 
@@ -39,7 +39,7 @@ def keyboard_from_data(data: List[str]) -> KeyboardButton:
         else:
             buttons[-1].append(button)
     return ReplyKeyboardMarkup(
-        keyboard=buttons, 
+        keyboard=buttons,
         resize_keyboard=True,
     )
 

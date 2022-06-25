@@ -1,34 +1,36 @@
-from urllib import response
-from bot.routers.handlers.common.keyboards import ON_HOLD_KEYBOARD, YES_NO_KEYBOARD
-from bot.routers.player_register.handlers.player_register_handler import PlayerRegisterHandler
+from bot.routers.common.keyboards import YES_NO_KEYBOARD
+from bot.routers.player_register.handler import \
+    PlayerRegisterHandler
 from bot.services.context_service import ContextService
-from bot.states import RootState, TGPlayerRegisterState
-from bot.types import Player, IncommingMessage
+from bot.states import TelegramPlayerRegisterState
+from bot.types import IncommingMessage
 
 
-class TGPlayerRegisterHandler(PlayerRegisterHandler):
+class TelegramPlayerRegisterHandler(PlayerRegisterHandler):
     async def new_player(self, message: IncommingMessage, context_service: ContextService) -> None:
         username = message.chat.username
         if not username:
             await self.ask_username(message, context_service)
-            return await context_service.set_state(TGPlayerRegisterState.WAIT_USERNAME)
-        
+            return TelegramPlayerRegisterState.WAIT_USERNAME
+
         await self.bot.send(
             chat_id = message.user_id,
             text=f'Do you want to be registered as `{username}`?',
             reply_markup=YES_NO_KEYBOARD
         )
-        return await context_service.set_state(TGPlayerRegisterState.WHAT_USERNAME_USE)
+        return TelegramPlayerRegisterState.WHAT_USERNAME_USE
 
 
-    async def use_tg_username(self, message: IncommingMessage, context_service: ContextService) -> None:
+    async def use_tg_username(self, message: IncommingMessage, 
+                              context_service: ContextService) -> None:
         username = message.chat.username
         identificator = message.user_id
         await self._register_player(message.user_id, identificator, username, context_service)
 
-    async def ask_new_username(self, message: IncommingMessage, context_service: ContextService) -> None:
+    async def ask_new_username(self, message: IncommingMessage, 
+                               context_service: ContextService) -> None:
         await self.ask_username(message, context_service)
-        return await context_service.set_state(TGPlayerRegisterState.WAIT_USERNAME)
+        return TelegramPlayerRegisterState.WAIT_USERNAME
 
     async def use_new_username(self, message: IncommingMessage, context_service: ContextService) -> None:
         username = message.text

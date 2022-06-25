@@ -5,7 +5,7 @@ from bot.types import Stake
 
 
 class StakeLoader(Loader):
-    
+
     def __call__(self, data: Dict[Any, Any]) -> Stake:
         return Stake(
             id=data['id'],

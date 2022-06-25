@@ -1,13 +1,14 @@
-from bot.routers.player_register.handlers.player_register_handler import PlayerRegisterHandler
+from bot.routers.player_register.handler import \
+    PlayerRegisterHandler
 from bot.services.context_service import ContextService
-from bot.states import NewPlayerRegisterState
+from bot.states import ExternalPlayerRegisterState
 from bot.types import IncommingMessage
 
 
-class NewPlayerRegisterHandler(PlayerRegisterHandler):
+class ExternalPlayerRegisterHandler(PlayerRegisterHandler):
     async def ask_username(self, message: IncommingMessage, context_service: ContextService) -> None:
         await super().ask_username(message, context_service)
-        return await context_service.set_state(NewPlayerRegisterState.WAIT_USERNAME)
+        return ExternalPlayerRegisterState.WAIT_USERNAME
 
     async def handle_username(self, message: IncommingMessage, context_service: ContextService) -> None:
         username = message.text

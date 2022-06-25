@@ -3,8 +3,8 @@ from collections import defaultdict
 from typing import Dict, List
 from bot.bot import TGBot
 
-from bot.routers.handlers.common.keyboards import SHOW_STATISTICS_KEYBOARD, keyboard_from_data
-from bot.routers.handlers.handler import Handler
+from bot.routers.common.keyboards import SHOW_STATISTICS_KEYBOARD, keyboard_from_data
+from bot.routers.handler import Handler
 from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
