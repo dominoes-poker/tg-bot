@@ -13,7 +13,6 @@ from bot.states import RoundState
 def setup_router(router: TGRouter, handler: RoundHandler) -> None:
     router.setup_handler(handler.start_round, RoundState.START, F.text.regexp(r'Start the \w+ round'))
     router.setup_handler(handler.finish_round, RoundState.BRIBES, F.text == BUTTON_ENTER_ROUND_RESULTS.text)
-        
 
 
 def create_round_router(bot: TGBot,
@@ -25,10 +24,10 @@ def create_round_router(bot: TGBot,
     
     router = TGRouter(name='<Round> - Router')
     handler = RoundHandler(bot, make_bet_handler, set_bribes_handler, game_data_service)
+    
     setup_router(router, handler)
-
     router.include_router(bet_router)
     router.include_router(bribes_router)
     router.include_router(statistics_router)
-    
+
     return router

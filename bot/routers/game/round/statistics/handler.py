@@ -5,7 +5,9 @@ from bot.bot import TGBot
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
-from bot.types import Game, IncommingMessage, Player, Round, Stake
+from bot.types import IncommingMessage, Player, Round, Stake
+from bot.states import RoundState
+from bot.routers.common.keyboards import keyboard_round
 
 
 class RoundStatisticsHandler(Handler):
@@ -21,11 +23,13 @@ class RoundStatisticsHandler(Handler):
         statistics = self._get_round_statistics(game.last_round, game.players)
         strings_statistics = "\n".join(f'`{player}` : {result}' for player, result in statistics.items())
         
-        text = f"The Round Statistics:\n{strings_statistics}"
+        text = f"The Round Statistics:\n\n{strings_statistics}"
         await self.bot.send(
             chat_id=message.user_id,
-            text=text
+            text=text,
+            reply_markup=keyboard_round(game.last_round.number + 1)
         )
+        return RoundState.START
 
     @staticmethod
     def _get_round_statistics(round: Round, players: List[Player]) -> Dict[str, int]:
@@ -39,7 +43,7 @@ class RoundStatisticsHandler(Handler):
     @staticmethod
     def _get_result(stake: Stake) -> int:
         if stake.bet > stake.bribe:
-            return -10 * (stake.bribe - stake.bet)
+            return -10 * (stake.bet - stake.bribe)
         if stake.bet < stake.bribe:
             return stake.bribe
         return 10 * stake.bet

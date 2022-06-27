@@ -1,8 +1,7 @@
-from typing import Optional, Union
+from typing import Optional
 from aiogram import Bot, Dispatcher
-from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
 
-ReplyMarkupType = Union[ReplyKeyboardMarkup, ReplyKeyboardRemove]
+from bot.types import ReplyMarkupType, ReplyKeyboardRemove
 
 class TGBot(Bot):
     def __init__(self, token: str) -> None:

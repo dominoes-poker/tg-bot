@@ -21,13 +21,13 @@ class RoundHandler(Handler):
 
     def _get_next_round_number(self, game: Game) -> int:
         if game.rounds:
-            next(
+            return list(
                 sorted(
                     game.rounds, 
                     key=lambda round: round.number
                     )
-                ) + 1
-        return 0
+                )[0].number + 1
+        return 1
 
     async def start_round(self, message: IncommingMessage, context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()

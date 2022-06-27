@@ -2,8 +2,7 @@
 from typing import List, Optional
 from attr import dataclass
 
-from .message import IncommingMessage, IncommingMessageWrapper
-
+from .message import IncommingMessage, IncommingMessageWrapper, ReplyMarkupType, ReplyKeyboardRemove
 
 @dataclass
 class Stake:
@@ -39,5 +38,5 @@ class Game:
     @property
     def last_round(self) -> Optional[Round]:
         if self.rounds:
-            return sorted(self.rounds, key=lambda round: round.number)[0]
+            return sorted(self.rounds, key=lambda round: round.number, reverse=True)[0]
         return None

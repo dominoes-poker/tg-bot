@@ -13,6 +13,10 @@ from bot.types import IncommingMessage, IncommingMessageWrapper
 class EventType(Enum):
     MESSAGE = 'message'
 
+
+CallbackType = Callable[[Message, FSMContext], State]
+
+
 class TGRouter(Router):
 
     @staticmethod
@@ -26,12 +30,12 @@ class TGRouter(Router):
             return self.message
         raise ValueError(f'Event type {event_type} is not supported')
 
-    def setup_handler(self, event_callback: Callable[[Message, FSMContext], State],
+    def setup_handler(self, event_callback: CallbackType,
                       *filters: FilterType,
                       event_type: EventType = EventType.MESSAGE,
                       flags: Optional[Dict[str, Any]] = None,
                       **bound_filters: Any,
-                      ):
+                      ) -> CallbackType:
 
         async def callback(tg_object: TelegramObject, state: FSMContext):
             message = self.create_message(tg_object)
@@ -39,10 +43,11 @@ class TGRouter(Router):
 
             state = await event_callback(message, context_service)
 
-            if isinstance(state, State):
+            if state and isinstance(state, State):
                 await context_service.set_state(state)
 
         observer = self._get_observer_by_event_type(event_type)
         observer.register(callback, *filters, flags=flags, **bound_filters)
 
         return callback
+

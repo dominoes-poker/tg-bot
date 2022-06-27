@@ -19,7 +19,7 @@ ON_HOLD_KEYBOARD = ReplyKeyboardMarkup(
 
 def keyboard_round(round_number: int) -> KeyboardButton:
     number_to_text = (
-        'first', 'second'
+        'first', 'second', 'third'
     )
     button_text = f'Start the {number_to_text[round_number-1]} round'
     buttons = [[

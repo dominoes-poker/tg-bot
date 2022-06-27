@@ -33,7 +33,7 @@ class BetsHandler(Handler):
         return MakeBetsState.USERNAME
     
     async def handle_username(self, message: IncommingMessage, context_service: ContextService) -> None:
-        
+    
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
 
