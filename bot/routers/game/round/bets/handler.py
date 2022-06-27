@@ -1,8 +1,8 @@
 
 from typing import List
 
-from bot.bot import TGBot
-from bot.routers.common.keyboards import (ENTER_ROUND_RESULTS_KEYBOARD,
+from bot.bot import DPBot
+from bot.routers.common.keyboards import (KEYBOARD_ENTER_ROUND_RESULTS,
                                           keyboard_from_data)
 from bot.routers.handler import Handler
 from bot.routers.utils import get_number_of_dices
@@ -13,7 +13,7 @@ from bot.types import Game, IncommingMessage, Stake
 
 
 class BetsHandler(Handler):
-    def __init__(self, bot: TGBot,
+    def __init__(self, bot: DPBot,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
         self._game_data_service = game_data_service
@@ -68,7 +68,7 @@ class BetsHandler(Handler):
         await self._bot.send(
             chat_id=message.user_id,
             text=f'Everyone made a bet, now - play',
-            reply_markup=ENTER_ROUND_RESULTS_KEYBOARD
+            reply_markup=KEYBOARD_ENTER_ROUND_RESULTS
         )
         return RoundState.BRIBES
 

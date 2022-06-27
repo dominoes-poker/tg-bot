@@ -1,17 +1,17 @@
 
 from typing import Dict, List
 
-from bot.bot import TGBot
+from bot.bot import DPBot
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
 from bot.types import IncommingMessage, Player, Round, Stake
 from bot.states import RoundState
-from bot.routers.common.keyboards import keyboard_round
+from bot.routers.common.keyboards import keyboard_start_new_round
 
 
 class RoundStatisticsHandler(Handler):
-    def __init__(self, bot: TGBot,
+    def __init__(self, bot: DPBot,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
         self._game_data_service = game_data_service
@@ -21,13 +21,13 @@ class RoundStatisticsHandler(Handler):
         game = await self._game_data_service.get_game(game_id)
         
         statistics = self._get_round_statistics(game.last_round, game.players)
-        strings_statistics = "\n".join(f'`{player}` : {result}' for player, result in statistics.items())
+        strings_statistics = '\n'.join(f'`{player}` : {result}' for player, result in statistics.items())
         
-        text = f"The Round Statistics:\n\n{strings_statistics}"
+        text = f'The Round Statistics:\n\n{strings_statistics}'
         await self.bot.send(
             chat_id=message.user_id,
             text=text,
-            reply_markup=keyboard_round(game.last_round.number + 1)
+            reply_markup=keyboard_start_new_round(game.last_round.number + 1)
         )
         return RoundState.START
 

@@ -1,7 +1,7 @@
 from aiogram import F
-from bot.bot import TGBot
+from bot.bot import DPBot
 from bot.routers.common.keyboards import BUTTON_NO, BUTTON_YES
-from bot.routers.router import TGRouter
+from bot.routers.router import DPRouter
 from bot.services.player_service import PlayerDataService
 from bot.states import RootState, TelegramPlayerRegisterState
 from bot.routers.player_register.telegram_player_register.handler import (
@@ -9,7 +9,7 @@ from bot.routers.player_register.telegram_player_register.handler import (
     )
 
 
-def setup_router(router: TGRouter, handler: TelegramPlayerRegisterHandler) -> None:
+def setup_router(router: DPRouter, handler: TelegramPlayerRegisterHandler) -> None:
     start_registration_filters = [
         RootState.TG_PLAYER_REGISTRATION, 
         F.text.casefold() == BUTTON_YES.text.lower()
@@ -40,11 +40,11 @@ def setup_router(router: TGRouter, handler: TelegramPlayerRegisterHandler) -> No
     router.setup_handler(handler.use_new_username, *new_username_filters)
 
 
-def create_telegram_player_register_router(bot: TGBot,
-                                           player_data_service: PlayerDataService) -> TGRouter:
+def create_telegram_player_register_router(bot: DPBot,
+                                           player_data_service: PlayerDataService) -> DPRouter:
     handler = TelegramPlayerRegisterHandler(bot, player_data_service)
 
-    router = TGRouter(name='<TGPlayerRegister> - Router')
+    router = DPRouter(name='<TGPlayerRegister> - Router')
 
     setup_router(router, handler)
 

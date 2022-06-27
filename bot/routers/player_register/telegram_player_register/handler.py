@@ -1,4 +1,4 @@
-from bot.routers.common.keyboards import YES_NO_KEYBOARD
+from bot.routers.common.keyboards import KEYBOARD_YES_NO
 from bot.routers.player_register.handler import \
     PlayerRegisterHandler
 from bot.services.context_service import ContextService
@@ -16,7 +16,7 @@ class TelegramPlayerRegisterHandler(PlayerRegisterHandler):
         await self.bot.send(
             chat_id = message.user_id,
             text=f'Do you want to be registered as `{username}`?',
-            reply_markup=YES_NO_KEYBOARD
+            reply_markup=KEYBOARD_YES_NO
         )
         return TelegramPlayerRegisterState.WHAT_USERNAME_USE
 

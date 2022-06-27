@@ -1,10 +1,11 @@
 from typing import List
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from bot.routers.utils import get_ending_for_ordered_number
 
 BUTTON_YES = KeyboardButton(text='Yes')
 BUTTON_NO = KeyboardButton(text='No')
 
-YES_NO_KEYBOARD = ReplyKeyboardMarkup(
+KEYBOARD_YES_NO = ReplyKeyboardMarkup(
     keyboard=[[BUTTON_YES,BUTTON_NO]],
     resize_keyboard=True,
 )
@@ -12,19 +13,16 @@ YES_NO_KEYBOARD = ReplyKeyboardMarkup(
 BUTTON_NEW_GAME = KeyboardButton(text='Start a new game')
 BUTTON_ADD_GAMER = KeyboardButton(text='Register my frined')
 
-ON_HOLD_KEYBOARD = ReplyKeyboardMarkup(
+KEYBOARD_ON_HOLD = ReplyKeyboardMarkup(
     keyboard=[[BUTTON_NEW_GAME],[BUTTON_ADD_GAMER]],
     resize_keyboard=True,
 )
 
-def keyboard_round(round_number: int) -> KeyboardButton:
-    number_to_text = (
-        'first', 'second', 'third'
-    )
-    button_text = f'Start the {number_to_text[round_number-1]} round'
+def keyboard_start_new_round(round_number: int) -> KeyboardButton:
+    button_text = f'Start the {round_number}{get_ending_for_ordered_number(round_number)} round'
     buttons = [[
         KeyboardButton(text=button_text)
-        ]]
+    ]]
     return ReplyKeyboardMarkup(
         keyboard=buttons,
         resize_keyboard=True,
@@ -46,14 +44,14 @@ def keyboard_from_data(data: List[str]) -> KeyboardButton:
 
 BUTTON_ENTER_ROUND_RESULTS = KeyboardButton(text='Enter results for the round')
 
-ENTER_ROUND_RESULTS_KEYBOARD = ReplyKeyboardMarkup(
+KEYBOARD_ENTER_ROUND_RESULTS = ReplyKeyboardMarkup(
     keyboard=[[BUTTON_ENTER_ROUND_RESULTS]],
     resize_keyboard=True,
 )
 
-SHOW_STATISTICS_BUTTON = KeyboardButton(text='Show Statistics')
+BUTTON_SHOW_STATISTICS = KeyboardButton(text='Show Statistics')
 
-SHOW_STATISTICS_KEYBOARD = ReplyKeyboardMarkup(
-    keyboard=[[SHOW_STATISTICS_BUTTON]],
+KEYBOARD_SHOW_STATISTICS = ReplyKeyboardMarkup(
+    keyboard=[[BUTTON_SHOW_STATISTICS]],
     resize_keyboard=True,
 )

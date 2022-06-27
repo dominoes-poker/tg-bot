@@ -1,10 +1,10 @@
-from bot.bot import TGBot
+from bot.bot import DPBot
 
 
 class Handler:
-    def __init__(self, bot: TGBot) -> None:
+    def __init__(self, bot: DPBot) -> None:
         self._bot = bot
 
     @property
-    def bot(self) -> TGBot:
+    def bot(self) -> DPBot:
         return self._bot

@@ -1,9 +1,10 @@
 from typing import Optional
-from aiogram import Bot, Dispatcher
+from aiogram import Bot as bot, Dispatcher
 
 from bot.types import ReplyMarkupType, ReplyKeyboardRemove
 
-class TGBot(Bot):
+# Dominoes Poker
+class DPBot(bot):
     def __init__(self, token: str) -> None:
         super().__init__(token)
         self._dispatcher: Dispatcher = None

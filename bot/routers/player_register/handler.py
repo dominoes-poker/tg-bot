@@ -2,8 +2,8 @@ import re
 
 from aiogram.dispatcher.fsm.state import State
 
-from bot.bot import TGBot
-from bot.routers.common.keyboards import ON_HOLD_KEYBOARD
+from bot.bot import DPBot
+from bot.routers.common.keyboards import KEYBOARD_ON_HOLD
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.player_service import PlayerDataService
@@ -12,7 +12,7 @@ from bot.types import IncommingMessage, Player
 
 
 class PlayerRegisterHandler(Handler):
-    def __init__(self, bot: TGBot, player_data_service: PlayerDataService) -> None:
+    def __init__(self, bot: DPBot, player_data_service: PlayerDataService) -> None:
         super().__init__(bot)
         self._player_data_service = player_data_service
         self._allow_username_pattern = re.compile(
@@ -27,7 +27,7 @@ class PlayerRegisterHandler(Handler):
         await self.bot.send(
             chat_id = chat_id,
             text=self._get_final_message(username),
-            reply_markup = ON_HOLD_KEYBOARD
+            reply_markup = KEYBOARD_ON_HOLD
         )
         return RootState.ON_HOLD
 
@@ -35,7 +35,7 @@ class PlayerRegisterHandler(Handler):
         await self.bot.send(
             chat_id = message.user_id,
             text='What do you want to do?',
-            reply_markup=ON_HOLD_KEYBOARD
+            reply_markup=KEYBOARD_ON_HOLD
         )
         return RootState.ON_HOLD
 

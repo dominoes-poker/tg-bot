@@ -17,7 +17,7 @@ class EventType(Enum):
 CallbackType = Callable[[Message, FSMContext], State]
 
 
-class TGRouter(Router):
+class DPRouter(Router):
 
     @staticmethod
     def create_message(tg_object: TelegramObject) -> IncommingMessage:

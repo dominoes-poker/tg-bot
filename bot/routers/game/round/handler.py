@@ -1,5 +1,5 @@
 
-from bot.bot import TGBot
+from bot.bot import DPBot
 from bot.routers.game.round.bets import BetsHandler
 from bot.routers.game.round.bribes import BribesHandler
 from bot.routers.handler import Handler
@@ -10,14 +10,14 @@ from bot.types import Game, IncommingMessage, Round
 
 
 class RoundHandler(Handler):
-    def __init__(self, bot: TGBot,
-                 make_bets_handler: BetsHandler,
-                 set_bribes_handler: BribesHandler,
+    def __init__(self, bot: DPBot,
+                 bets_handler: BetsHandler,
+                 bribes_handler: BribesHandler,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
         self._game_data_service = game_data_service
-        self._make_bets_handler = make_bets_handler
-        self._set_bribes_handler = set_bribes_handler
+        self._bets_handler = bets_handler
+        self._bribes_handler = bribes_handler
 
     def _get_next_round_number(self, game: Game) -> int:
         if game.rounds:
@@ -39,7 +39,7 @@ class RoundHandler(Handler):
             numberOfDice=get_number_of_dices(game, next_round),
         )
         await self._game_data_service.start_new_round(new_round)
-        return await self._make_bets_handler.ask_who_make_bet(message, context_service)
+        return await self._bets_handler.ask_who_make_bet(message, context_service)
 
     async def finish_round(self, message: IncommingMessage, context_service: ContextService) -> None:
-        return await self._set_bribes_handler.ask_results(message, context_service)
+        return await self._bribes_handler.ask_player_bribes(message, context_service)

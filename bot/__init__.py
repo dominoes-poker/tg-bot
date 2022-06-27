@@ -1,2 +1,2 @@
-from bot.bot import TGBot
+from bot.bot import DPBot
 from bot.factory import BotFactory

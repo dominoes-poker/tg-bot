@@ -1,17 +1,17 @@
-from bot.bot import TGBot
+from bot.bot import DPBot
 from bot.routers.wellocme.handler import WellcomeHandler
-from bot.routers.router import TGRouter
+from bot.routers.router import DPRouter
 from bot.services.player_service import PlayerDataService
 
 
-def setup_router(router: TGRouter, handler: WellcomeHandler) -> None:
+def setup_router(router: DPRouter, handler: WellcomeHandler) -> None:
     router.setup_handler(handler.handle_enter, commands=['start'])
 
-def create_wellcome_router(bot:TGBot,
-                           player_data_service: PlayerDataService) -> TGRouter:
+def create_wellcome_router(bot:DPBot,
+                           player_data_service: PlayerDataService) -> DPRouter:
     handler = WellcomeHandler(bot, player_data_service)
 
-    router = TGRouter(name='<Wellcome> - Router')
+    router = DPRouter(name='<Wellcome> - Router')
     setup_router(router, handler)
 
     return router

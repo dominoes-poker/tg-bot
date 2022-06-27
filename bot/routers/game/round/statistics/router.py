@@ -1,22 +1,22 @@
 from aiogram import F
 
-from bot.bot import TGBot
-from bot.routers.router import TGRouter
+from bot.bot import DPBot
+from bot.routers.router import DPRouter
 from bot.services.game_service import GameDataService
 from bot.states import RoundState
 from bot.routers.game.round.statistics.handler import RoundStatisticsHandler
-from bot.routers.common.keyboards import SHOW_STATISTICS_BUTTON
+from bot.routers.common.keyboards import BUTTON_SHOW_STATISTICS
 
-def setup_router(router: TGRouter, handler: RoundStatisticsHandler) -> None:
+def setup_router(router: DPRouter, handler: RoundStatisticsHandler) -> None:
     statistics_filters = [
         RoundState.STATISTICS, 
-        F.text.casefold() == SHOW_STATISTICS_BUTTON.text.lower()
+        F.text.casefold() == BUTTON_SHOW_STATISTICS.text.lower()
     ]
     router.setup_handler(handler.show_statistics, *statistics_filters)
 
-def create_statistics_router(bot: TGBot,
-                            game_data_service: GameDataService) -> TGRouter:
-    router = TGRouter(name='<ShowStatistics> - Router')
+def create_statistics_router(bot: DPBot,
+                            game_data_service: GameDataService) -> DPRouter:
+    router = DPRouter(name='<ShowStatistics> - Router')
 
     handler = RoundStatisticsHandler(bot, game_data_service)
     setup_router(router, handler)

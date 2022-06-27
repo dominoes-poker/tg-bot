@@ -1,7 +1,7 @@
 from typing import Iterable, Set
 
-from bot.bot import TGBot
-from bot.routers.common.keyboards import keyboard_round
+from bot.bot import DPBot
+from bot.routers.common.keyboards import keyboard_start_new_round
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
@@ -11,7 +11,7 @@ from bot.types import IncommingMessage
 
 
 class CreateGameHandler(Handler):
-    def __init__(self, bot: TGBot,
+    def __init__(self, bot: DPBot,
                  player_data_service: PlayerDataService,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
@@ -50,7 +50,7 @@ class CreateGameHandler(Handler):
         await self.bot.send(
             chat_id=message.user_id,
             text='Great! We are ready to start the first round',
-            reply_markup=keyboard_round(1)
+            reply_markup=keyboard_start_new_round(1)
         )
         return RoundState.START
         
