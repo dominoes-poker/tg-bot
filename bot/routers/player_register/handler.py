@@ -43,9 +43,8 @@ class PlayerRegisterHandler(Handler):
     def _get_final_message(username: str) -> str:
         raise NotImplementedError()
 
-    @classmethod
-    def _is_valid_username(cls, username: str) -> bool:
-        return bool(cls._allow_username_pattern.match(username))
+    def _is_valid_username(self, username: str) -> bool:
+        return bool(self._allow_username_pattern.match(username))
 
     async def ask_username(self, message: IncommingMessage, _: ContextService) -> None:
         await self.bot.send(

@@ -19,6 +19,7 @@ class RoundState(StatesGroup):
     START  = State()
     BETS  = State()
     BRIBES  = State()
+    STATISTICS = State()
 
 class MakeBetsState(StatesGroup):
     USERNAME  = State()

@@ -1,14 +1,16 @@
 
 from typing import List, Optional
-from bot.bot import TGBot
 
-from bot.routers.common.keyboards import SHOW_STATISTICS_KEYBOARD, keyboard_from_data
+from aiogram.dispatcher.fsm.state import State
+from bot.bot import TGBot
+from bot.routers.common.keyboards import (SHOW_STATISTICS_KEYBOARD,
+                                          keyboard_from_data)
 from bot.routers.handler import Handler
 from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
+from bot.states import RoundState, SetBribesState
 from bot.types import Game, IncommingMessage, Player
-from bot.states import SetBribesState
 
 
 class BribesHandler(Handler):
@@ -48,12 +50,13 @@ class BribesHandler(Handler):
         
         return await self.ask_results(message, context_service)
 
-    async def _finish(self, message: IncommingMessage, context_service: ContextService) -> None:
-        return await self._bot.send(
+    async def _finish(self, message: IncommingMessage, context_service: ContextService) -> State:
+        await self._bot.send(
                 chat_id=message.user_id,
                 text=f'The round has finished',
                 reply_markup=SHOW_STATISTICS_KEYBOARD
         )
+        return RoundState.STATISTICS
 
     def _get_results_variants(self, game: Game) -> List[int]:
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)

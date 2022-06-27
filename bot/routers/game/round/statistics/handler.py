@@ -1,17 +1,14 @@
 
-from collections import defaultdict
 from typing import Dict, List
-from bot.bot import TGBot
 
-from bot.routers.common.keyboards import SHOW_STATISTICS_KEYBOARD, keyboard_from_data
+from bot.bot import TGBot
 from bot.routers.handler import Handler
-from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
 from bot.types import Game, IncommingMessage, Player, Round, Stake
 
 
-class ShowStatisticsHandler(Handler):
+class RoundStatisticsHandler(Handler):
     def __init__(self, bot: TGBot,
                  game_data_service: GameDataService) -> None:
         super().__init__(bot)
@@ -22,14 +19,13 @@ class ShowStatisticsHandler(Handler):
         game = await self._game_data_service.get_game(game_id)
         
         statistics = self._get_round_statistics(game.last_round, game.players)
-        strings_statistics = "\n".join(f'`{player}` : {result}\n' for player, result in statistics.items())
+        strings_statistics = "\n".join(f'`{player}` : {result}' for player, result in statistics.items())
         
-        text = f"The Round Statistics\n{strings_statistics}"
-
-    @staticmethod
-    def _game_statistics(gmae: Game) -> Dict[str, int]:
-        result = {player.usernmae: 0 for player in gamer.players}
-
+        text = f"The Round Statistics:\n{strings_statistics}"
+        await self.bot.send(
+            chat_id=message.user_id,
+            text=text
+        )
 
     @staticmethod
     def _get_round_statistics(round: Round, players: List[Player]) -> Dict[str, int]:
@@ -37,7 +33,7 @@ class ShowStatisticsHandler(Handler):
         results = {}
         for stake in round.stakes:
             username = player_id_to_username[stake.playerId]
-            results[username] = ShowStatisticsHandler._get_result(stake)
+            results[username] = RoundStatisticsHandler._get_result(stake)
         return results
     
     @staticmethod

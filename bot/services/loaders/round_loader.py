@@ -7,6 +7,7 @@ from bot.types import Round
 
 class RoundLoader(Loader):
     def __init__(self, stake_loader: StakeLoader):
+        super().__init__()
         self._stake_loader = stake_loader
 
     def __call__(self, data: Dict[Any, Any]) -> Round:
