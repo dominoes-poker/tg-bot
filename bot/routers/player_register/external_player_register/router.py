@@ -4,7 +4,9 @@ from bot.routers.common.keyboards import BUTTON_ADD_GAMER
 from bot.routers.router import DPRouter
 from bot.services.player_service import PlayerDataService
 from bot.states import RootState, ExternalPlayerRegisterState
-from bot.routers.player_register.external_player_register.handler import ExternalPlayerRegisterHandler 
+from bot.routers.player_register.external_player_register.handler import (
+        ExternalPlayerRegisterHandler
+    )
 
 
 def setup_router(router: DPRouter, handler: ExternalPlayerRegisterHandler) -> None:
@@ -24,5 +26,5 @@ def create_external_player_register_router(bot: DPBot,
 
     handler = ExternalPlayerRegisterHandler(bot, player_data_service)
     setup_router(router, handler)
-    
+
     return router

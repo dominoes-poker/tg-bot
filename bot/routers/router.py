@@ -50,4 +50,3 @@ class DPRouter(Router):
         observer.register(callback, *filters, flags=flags, **bound_filters)
 
         return callback
-

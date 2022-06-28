@@ -16,13 +16,15 @@ class RoundStatisticsHandler(Handler):
         super().__init__(bot)
         self._game_data_service = game_data_service
 
-    async def show_statistics(self, message: IncommingMessage, context_service: ContextService) -> None:
+    async def show_statistics(self, message: IncommingMessage,
+                              context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
-        
+
         statistics = self._get_round_statistics(game.last_round, game.players)
-        strings_statistics = '\n'.join(f'`{player}` : {result}' for player, result in statistics.items())
-        
+        statistics = [f'`{player}` : {result}' for player, result in statistics.items()]
+        strings_statistics = '\n'.join(statistics)
+
         text = f'The Round Statistics:\n\n{strings_statistics}'
         await self.bot.send(
             chat_id=message.user_id,
@@ -32,14 +34,14 @@ class RoundStatisticsHandler(Handler):
         return RoundState.START
 
     @staticmethod
-    def _get_round_statistics(round: Round, players: List[Player]) -> Dict[str, int]:
+    def _get_round_statistics(round_: Round, players: List[Player]) -> Dict[str, int]:
         player_id_to_username = {player.id: player.username for player in players}
         results = {}
-        for stake in round.stakes:
+        for stake in round_.stakes:
             username = player_id_to_username[stake.playerId]
             results[username] = RoundStatisticsHandler._get_result(stake)
         return results
-    
+
     @staticmethod
     def _get_result(stake: Stake) -> int:
         if stake.bet > stake.bribe:

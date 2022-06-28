@@ -49,9 +49,19 @@ KEYBOARD_ENTER_ROUND_RESULTS = ReplyKeyboardMarkup(
     resize_keyboard=True,
 )
 
-BUTTON_SHOW_STATISTICS = KeyboardButton(text='Show Statistics')
+BUTTON_SHOW_ROUND_STATISTICS = KeyboardButton(text='Show the round statistics')
 
 KEYBOARD_SHOW_STATISTICS = ReplyKeyboardMarkup(
-    keyboard=[[BUTTON_SHOW_STATISTICS]],
+    keyboard=[[BUTTON_SHOW_ROUND_STATISTICS]],
+    resize_keyboard=True,
+)
+
+BUTTON_SHOW_GAME_STATISTICS = KeyboardButton(text='Show the game statistics')
+
+KEYBOARD_BEATWEEN_ROUNDS = ReplyKeyboardMarkup(
+    keyboard=[
+        [BUTTON_SHOW_ROUND_STATISTICS],
+        [BUTTON_SHOW_GAME_STATISTICS]
+        ],
     resize_keyboard=True,
 )

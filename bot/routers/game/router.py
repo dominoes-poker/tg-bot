@@ -1,5 +1,5 @@
 from bot.bot import DPBot
-from bot.routers.game.create_game import create_start_game_router
+from bot.routers.game.start import create_start_game_router
 from bot.routers.game.round import create_round_router
 from bot.routers.router import DPRouter
 from bot.services.game_service import GameDataService

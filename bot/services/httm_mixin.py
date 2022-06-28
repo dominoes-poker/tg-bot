@@ -22,7 +22,7 @@ class HTTPMixin:
         return f'{self._data_service_url}/api'
 
     @staticmethod
-    async def get(url: str, session: aiohttp.ClientSession, 
+    async def get(url: str, session: aiohttp.ClientSession,
                   raise_for_status: bool = True) -> RequestResult:
         async with session.get(url, raise_for_status=raise_for_status) as response:
             data = await response.json()

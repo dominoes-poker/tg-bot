@@ -1,16 +1,15 @@
-from typing import Optional
-from bot.services.loaders.game_loader import GameLoader
-from bot.types import Game, Round, Stake
+from typing import List
+
 from bot.services.data_service import DataService
+from bot.types import Game, Player, Round, Stake
 
 
 class GameDataService(DataService):
 
-    async def get_game(self, identificator: Optional[int] = None,
-                       loader: GameLoader= None) -> Optional[Game]:
+    async def get_game(self, game_id: int) -> Game:
         raise NotImplementedError
 
-    async def create(self) -> Game:
+    async def create(self, players: List[Player]) -> Game:
         raise NotImplementedError
 
     async def start_new_round(self, round_: Round) -> Game:

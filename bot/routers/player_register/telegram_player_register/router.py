@@ -11,25 +11,25 @@ from bot.routers.player_register.telegram_player_register.handler import (
 
 def setup_router(router: DPRouter, handler: TelegramPlayerRegisterHandler) -> None:
     start_registration_filters = [
-        RootState.TG_PLAYER_REGISTRATION, 
+        RootState.TG_PLAYER_REGISTRATION,
         F.text.casefold() == BUTTON_YES.text.lower()
     ]
     router.setup_handler(handler.new_player, *start_registration_filters)
 
     decline_registration_filters = [
-        RootState.TG_PLAYER_REGISTRATION, 
+        RootState.TG_PLAYER_REGISTRATION,
         F.text.casefold() == BUTTON_NO.text.lower()
     ]
     router.setup_handler(handler.decline_registration, *decline_registration_filters)
 
     agree_tg_username_filters = [
-        TelegramPlayerRegisterState.WHAT_USERNAME_USE, 
+        TelegramPlayerRegisterState.WHAT_USERNAME_USE,
         F.text.casefold() == BUTTON_YES.text.lower()
     ]
     router.setup_handler(handler.use_tg_username, *agree_tg_username_filters)
 
     disagree_tg_username_filters = [
-        TelegramPlayerRegisterState.WHAT_USERNAME_USE, 
+        TelegramPlayerRegisterState.WHAT_USERNAME_USE,
         F.text.casefold() == BUTTON_NO.text.lower()
     ]
     router.setup_handler(handler.ask_new_username, *disagree_tg_username_filters)

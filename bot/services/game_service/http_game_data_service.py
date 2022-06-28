@@ -7,10 +7,10 @@ from bot.services.loaders.game_loader import GameLoader
 from bot.types import Player, Game, Round, Stake
 
 
-def round_to_dict(round: Round) -> dict:
+def round_to_dict(round_: Round) -> dict:
     return {
-        'gameId': round.gameId,
-        'numberOfDice':round.numberOfDice,
+        'gameId': round_.gameId,
+        'numberOfDice':round_.numberOfDice,
     }
 
 def stake_to_dict(stake: Stake) -> dict:
@@ -47,19 +47,17 @@ class HTTPGameDataService(GameDataService, HTTPMixin):
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, body, session)
         return result.load(loader=self._loader.round_loader)
-    
+
     async def set_bet(self, game_id: int, stake: Stake) -> Game:
         url = f'{self.game_api_url}/{game_id}/round/{stake.roundId}/bet'
         body = stake_to_dict(stake)
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, body, session)
-        return result.load(loader=self._loader)   
+        return result.load(loader=self._loader)
 
     async def set_bribe(self, game_id: int, stake: Stake) -> Game:
         url = f'{self.game_api_url}/{game_id}/round/{stake["roundId"]}/bribe'
-        
+
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, stake, session)
         return result.load(loader=self._loader)
-
-

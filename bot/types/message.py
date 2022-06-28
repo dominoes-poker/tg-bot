@@ -1,7 +1,9 @@
 
-from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
-from aiogram.types import Chat, Message, TelegramObject
 from typing import Union
+
+from aiogram.types import (Chat, Message, ReplyKeyboardMarkup,
+                           ReplyKeyboardRemove, TelegramObject)
+
 
 class IncommingMessage:
     def __init__(self, tg_object: TelegramObject) -> None:

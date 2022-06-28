@@ -1,10 +1,11 @@
 import asyncio
 from itertools import chain
-from typing import Any, Callable, Dict, Iterable, Optional, List
+from typing import Callable, Dict, Iterable, List, Optional
+
 import aiohttp
-from bot.services.player_service.player_data_service import PlayerDataService
 from bot.services.httm_mixin import HTTPMixin
 from bot.services.loaders import PlayerLoader
+from bot.services.player_service.player_data_service import PlayerDataService
 from bot.types import Player
 
 
@@ -52,7 +53,7 @@ class HTTPPlayerDataService(PlayerDataService, HTTPMixin):
                 if error.code == 404:
                     return None
         return result.load(loader=self._loader)
-    
+
     async def get_players_by_username(self, usernames: List[str]) -> List[Player]:
         urls = [self._get_url_for_request_by_username(username) for username in usernames]
         async with aiohttp.ClientSession() as session:

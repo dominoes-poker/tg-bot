@@ -3,7 +3,6 @@ from aiogram import F
 from bot.bot import DPBot
 from bot.routers.router import DPRouter
 from bot.services.game_service import GameDataService
-from bot.services.player_service import PlayerDataService
 from bot.states import SetBribesState
 from bot.routers.game.round.bribes.handler import BribesHandler
 

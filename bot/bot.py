@@ -20,7 +20,7 @@ class DPBot(bot):
     async def send(self,
                    chat_id: int,
                    text: str,
-                   reply_markup: Optional[ReplyMarkupType] = ReplyKeyboardRemove,):
+                   reply_markup: Optional[ReplyMarkupType] = ReplyKeyboardRemove):
         return await self.send_message(
             chat_id=chat_id,
             text=text,

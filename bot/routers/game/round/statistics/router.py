@@ -1,16 +1,16 @@
 from aiogram import F
-
 from bot.bot import DPBot
+from bot.routers.common.keyboards import BUTTON_SHOW_ROUND_STATISTICS
+from bot.routers.game.round.statistics.handler import RoundStatisticsHandler
 from bot.routers.router import DPRouter
 from bot.services.game_service import GameDataService
 from bot.states import RoundState
-from bot.routers.game.round.statistics.handler import RoundStatisticsHandler
-from bot.routers.common.keyboards import BUTTON_SHOW_STATISTICS
+
 
 def setup_router(router: DPRouter, handler: RoundStatisticsHandler) -> None:
     statistics_filters = [
-        RoundState.STATISTICS, 
-        F.text.casefold() == BUTTON_SHOW_STATISTICS.text.lower()
+        RoundState.STATISTICS,
+        F.text.casefold() == BUTTON_SHOW_ROUND_STATISTICS.text.lower()
     ]
     router.setup_handler(handler.show_statistics, *statistics_filters)
 

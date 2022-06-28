@@ -23,16 +23,17 @@ class RoundHandler(Handler):
         if game.rounds:
             return list(
                 sorted(
-                    game.rounds, 
+                    game.rounds,
                     key=lambda round: round.number
                     )
                 )[0].number + 1
         return 1
 
-    async def start_round(self, message: IncommingMessage, context_service: ContextService) -> None:
+    async def start_round(self, message: IncommingMessage,
+                          context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
-        
+
         next_round = self._get_next_round_number(game)
         new_round = Round(
             gameId=game_id,
@@ -41,5 +42,6 @@ class RoundHandler(Handler):
         await self._game_data_service.start_new_round(new_round)
         return await self._bets_handler.ask_who_make_bet(message, context_service)
 
-    async def finish_round(self, message: IncommingMessage, context_service: ContextService) -> None:
+    async def finish_round(self, message: IncommingMessage,
+                           context_service: ContextService) -> None:
         return await self._bribes_handler.ask_player_bribes(message, context_service)
