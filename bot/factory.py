@@ -6,7 +6,8 @@ from config import Config
 
 from bot.bot import DPBot
 from bot.routers import (DPRouter, create_player_register_router,
-                         create_root_game_router, create_wellcome_router)
+                         create_root_game_router, create_wellcome_router,
+                         create_help_router)
 from bot.services.game_service.factory import get_game_data_service
 from bot.services.player_service import get_player_data_service
 
@@ -35,5 +36,6 @@ class BotFactory:
         return (
             create_wellcome_router(bot, player_data_service),
             create_player_register_router(bot, player_data_service),
-            create_root_game_router(bot, player_data_service, game_data_service)
+            create_root_game_router(bot, player_data_service, game_data_service),
+            create_help_router(bot)
         )
