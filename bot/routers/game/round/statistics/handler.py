@@ -1,11 +1,12 @@
 
-from typing import Dict, List
+from typing import List
 
 from bot.bot import DPBot
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
-from bot.types import IncommingMessage, Player, Round, Stake
+from bot.services.statistics_service import RoundStatiticsService, StatisticsPresentService
+from bot.types import IncommingMessage, Player, Round
 from bot.states import RoundState
 from bot.routers.common.keyboards import keyboard_start_new_round
 
@@ -22,10 +23,8 @@ class RoundStatisticsHandler(Handler):
         game = await self._game_data_service.get_game(game_id)
 
         statistics = self._get_round_statistics(game.last_round, game.players)
-        statistics = [f'`{player}` : {result}' for player, result in statistics.items()]
-        strings_statistics = '\n'.join(statistics)
 
-        text = f'The Round Statistics:\n\n{strings_statistics}'
+        text = f'The Round Statistics:\n\n{statistics}'
         await self.bot.send(
             chat_id=message.user_id,
             text=text,
@@ -34,18 +33,6 @@ class RoundStatisticsHandler(Handler):
         return RoundState.START
 
     @staticmethod
-    def _get_round_statistics(round_: Round, players: List[Player]) -> Dict[str, int]:
-        player_id_to_username = {player.id: player.username for player in players}
-        results = {}
-        for stake in round_.stakes:
-            username = player_id_to_username[stake.playerId]
-            results[username] = RoundStatisticsHandler._get_result(stake)
-        return results
-
-    @staticmethod
-    def _get_result(stake: Stake) -> int:
-        if stake.bet > stake.bribe:
-            return -10 * (stake.bet - stake.bribe)
-        if stake.bet < stake.bribe:
-            return stake.bribe
-        return 10 * stake.bet
+    def _get_round_statistics(round_: Round, players: List[Player]) -> str:
+        statistics = RoundStatiticsService(players).total(round_)
+        return StatisticsPresentService.present(statistics)

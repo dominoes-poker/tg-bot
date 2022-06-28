@@ -55,7 +55,7 @@ class BribesHandler(Handler):
         stakes = game.last_round.stakes
         players = {player.id: player.username for player in game.players}
 
-        losers = { 
+        losers = {
             stake.playerId: players[stake.playerId]
             for stake in stakes if stake.bribe is None
         }
@@ -74,7 +74,7 @@ class BribesHandler(Handler):
     async def _finish(self, user_id: int) -> State:
         await self._bot.send(
                 chat_id=user_id,
-                text=f'The round has finished',
+                text='The round has finished',
                 reply_markup=KEYBOARD_BEATWEEN_ROUNDS
         )
         return RoundState.STATISTICS
@@ -90,12 +90,12 @@ class BribesHandler(Handler):
     def _get_bribes_variants(self, game: Game) -> Optional[List[int]]:
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
         taken = sum(stake.bribe for stake in stakes if stake.bribe is not None)
-        
+
         remaining_bribes = get_number_of_dices(game, game.last_round.number) - taken
-        
+
         if remaining_bribes == 0:
             return None
-        
+
         return list(range(remaining_bribes + 1))
 
     def _get_player_to_ask_results(self, game: Game) -> Optional[Player]:
