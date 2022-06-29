@@ -1,7 +1,7 @@
 from typing import Optional
 from aiogram import Bot as bot, Dispatcher
 
-from bot.types import ReplyMarkupType, ReplyKeyboardRemove
+from bot.types import ReplyMarkupType
 
 # Dominoes Poker
 class DPBot(bot):
@@ -20,7 +20,7 @@ class DPBot(bot):
     async def send(self,
                    chat_id: int,
                    text: str,
-                   reply_markup: Optional[ReplyMarkupType] = ReplyKeyboardRemove):
+                   reply_markup: Optional[ReplyMarkupType] = None):
         return await self.send_message(
             chat_id=chat_id,
             text=text,

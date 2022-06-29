@@ -20,3 +20,6 @@ class GameDataService(DataService):
 
     async def set_bribe(self, game_id: int, stake: Stake) -> Game:
         raise NotImplementedError
+
+    async def finish(self, game_id: int) -> Game:
+        raise NotImplementedError

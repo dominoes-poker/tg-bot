@@ -18,10 +18,13 @@ KEYBOARD_ON_HOLD = ReplyKeyboardMarkup(
     resize_keyboard=True,
 )
 
+def _get_new_round_start_button(round_number: int) -> KeyboardButton:
+    button_text = f'Start the {round_number}{get_ending_for_ordered_number(round_number)} round' 
+    return KeyboardButton(text=button_text)
+
 def keyboard_start_new_round(round_number: int) -> KeyboardButton:
-    button_text = f'Start the {round_number}{get_ending_for_ordered_number(round_number)} round'
     buttons = [[
-        KeyboardButton(text=button_text)
+        _get_new_round_start_button(round_number)
     ]]
     return ReplyKeyboardMarkup(
         keyboard=buttons,
@@ -58,10 +61,23 @@ KEYBOARD_SHOW_STATISTICS = ReplyKeyboardMarkup(
 
 BUTTON_SHOW_GAME_STATISTICS = KeyboardButton(text='Show the game statistics')
 
-KEYBOARD_BEATWEEN_ROUNDS = ReplyKeyboardMarkup(
+def keyboard_after_round(next_round_number: int) -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
     keyboard=[
         [BUTTON_SHOW_ROUND_STATISTICS],
-        [BUTTON_SHOW_GAME_STATISTICS]
-        ],
+        [BUTTON_SHOW_GAME_STATISTICS],
+        [_get_new_round_start_button(next_round_number)]
+    ],
+    resize_keyboard=True,
+)
+
+BUTTON_FINISH_GAME = KeyboardButton(text='Finish the game')
+
+KEYBOARD_GAME_OVER = ReplyKeyboardMarkup(
+    keyboard=[
+        [BUTTON_SHOW_ROUND_STATISTICS],
+        [BUTTON_SHOW_GAME_STATISTICS],
+        [BUTTON_FINISH_GAME],
+    ],
     resize_keyboard=True,
 )

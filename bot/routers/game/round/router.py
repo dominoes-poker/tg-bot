@@ -13,7 +13,11 @@ from bot.states import RoundState
 def setup_router(router: DPRouter, handler: RoundHandler) -> None:
     router.setup_handler(
         handler.start_round,
-        RoundState.START, F.text.regexp(r'Start the \w+ round')
+        RoundState.START, F.text.regexp(r'Start the \d.* round')
+    )
+    router.setup_handler(
+        handler.start_round,
+        RoundState.ON_HOLD, F.text.regexp(r'Start the \d.* round')
     )
     router.setup_handler(
         handler.finish_round,

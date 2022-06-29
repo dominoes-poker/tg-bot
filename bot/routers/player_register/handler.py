@@ -1,7 +1,7 @@
 import re
 
 from aiogram.dispatcher.fsm.state import State
-
+from aiogram.types import ReplyKeyboardMarkup
 from bot.bot import DPBot
 from bot.routers.common.keyboards import KEYBOARD_ON_HOLD
 from bot.routers.handler import Handler
@@ -25,9 +25,9 @@ class PlayerRegisterHandler(Handler):
         await self._player_data_service.register(player_data)
 
         await self.bot.send(
-            chat_id = chat_id,
+            chat_id=chat_id,
             text=self._get_final_message(username),
-            reply_markup = KEYBOARD_ON_HOLD
+            reply_markup=KEYBOARD_ON_HOLD
         )
         return RootState.ON_HOLD
 
@@ -50,6 +50,7 @@ class PlayerRegisterHandler(Handler):
         await self.bot.send(
             chat_id = message.user_id,
             text='Send me username',
+            reply_markup=ReplyKeyboardMarkup
         )
 
     async def _bad_username_response(self, chat_id) -> None:
@@ -58,5 +59,6 @@ class PlayerRegisterHandler(Handler):
                   'Please try again'
         await self.bot.send(
                 chat_id = chat_id,
-                text=message
+                text=message,
+                reply_markup=ReplyKeyboardMarkup
             )

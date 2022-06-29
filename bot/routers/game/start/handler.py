@@ -1,5 +1,6 @@
 from typing import Iterable, Set
 
+from aiogram.types import ReplyKeyboardRemove
 from bot.bot import DPBot
 from bot.routers.common.keyboards import keyboard_start_new_round
 from bot.routers.handler import Handler
@@ -24,6 +25,7 @@ class StartGameHandler(Handler):
             text='Ok, lets start a new game. ' \
                  'Who will play with you? ' \
                  'Send me usernames of every player',
+            reply_markup=ReplyKeyboardRemove
         )
         return GameState.WAIT_PLAYER_USERNAMES
 
@@ -38,7 +40,8 @@ class StartGameHandler(Handler):
         if len(player_usernames) < 2:
             return await self.bot.send(
                 chat_id=message.user_id,
-                text='At least two players must be participants at game. Please, try again.'
+                text='At least two players must be participants at game. Please, try again.',
+                reply_markup=ReplyKeyboardRemove
             )
         players = await self._player_data_service.get_players_by_username(player_usernames)
         if len(players) != len(player_usernames):
@@ -50,7 +53,8 @@ class StartGameHandler(Handler):
             return await self.bot.send(
                 chat_id=message.user_id,
                 text=f'I could not find users: `{"`, `".join(strange_usernames)}`. '\
-                      'Please, check and send correct'
+                      'Please, check and send correct',
+                reply_markup=ReplyKeyboardRemove
             )
         game = await self._game_data_service.create(players=players)
         await context_service.set_current_game_id(game)

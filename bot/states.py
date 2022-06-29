@@ -16,10 +16,9 @@ class GameState(StatesGroup):
     WAIT_PLAYER_USERNAMES = State()
 
 class RoundState(StatesGroup):
-    START  = State()
-    BETS  = State()
-    BRIBES  = State()
-    STATISTICS = State()
+    START = State()
+    BRIBES = State()
+    ON_HOLD = State()
 
 class MakeBetsState(StatesGroup):
     USERNAME  = State()

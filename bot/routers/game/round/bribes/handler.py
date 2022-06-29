@@ -3,13 +3,14 @@ from typing import List, Optional
 
 from aiogram.dispatcher.fsm.state import State
 from bot.bot import DPBot
-from bot.routers.common.keyboards import (KEYBOARD_BEATWEEN_ROUNDS,
+from bot.routers.common.keyboards import (KEYBOARD_GAME_OVER,
+                                          keyboard_after_round,
                                           keyboard_from_data)
 from bot.routers.handler import Handler
 from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
 from bot.services.game_service import GameDataService
-from bot.states import RoundState, SetBribesState
+from bot.states import RootState, RoundState, SetBribesState
 from bot.types import Game, IncommingMessage, Player
 
 
@@ -25,7 +26,7 @@ class BribesHandler(Handler):
         player = self._get_player_to_ask_results(game)
 
         if not player:
-            return await self._finish(message.user_id)
+            return await self._finish(message.user_id, game)
 
         remaining_bribes = self._get_bribes_variants(game)
         if not remaining_bribes:
@@ -69,15 +70,23 @@ class BribesHandler(Handler):
                 chat_id=user_id,
                 text=f'Looks like `{losers}` did not get anything in this round.'
         )
-        return await self._finish(user_id)
+        return await self._finish(user_id, game)
 
-    async def _finish(self, user_id: int) -> State:
+    async def _finish(self, user_id: int, game: Game) -> State:
+        next_round_number = game.last_round.number + 1
+        if next_round_number < 17:
+            await self._bot.send(
+                    chat_id=user_id,
+                    text='The round has finished',
+                    reply_markup=keyboard_after_round(next_round_number)
+            )
+            return RoundState.ON_HOLD
         await self._bot.send(
-                chat_id=user_id,
-                text='The round has finished',
-                reply_markup=KEYBOARD_BEATWEEN_ROUNDS
-        )
-        return RoundState.STATISTICS
+                    chat_id=user_id,
+                    text='The game is over',
+                    reply_markup=KEYBOARD_GAME_OVER
+            )
+        return RootState.ON_HOLD
 
     async def _set_bribe(self, player_id: int, bribe: int, game: Game) -> Game:
         stake = dict(
@@ -101,7 +110,7 @@ class BribesHandler(Handler):
     def _get_player_to_ask_results(self, game: Game) -> Optional[Player]:
         if not game.rounds or not game.last_round.stakes:
             return [player.username for player in game.players]
-        stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id, reverse=True)
+        stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
         players_ask_results = {stake.playerId for stake in stakes if stake.bribe is None}
 
         for player in game.players:

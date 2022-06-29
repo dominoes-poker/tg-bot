@@ -10,7 +10,7 @@ class Statistics:
 
     def update_from_round(self, round_: Round) -> 'Statistics':
         for stake in round_.stakes:
-            self._statistics[stake.playerId] = self._infer(stake.bet, stake.bribe)
+            self._statistics[stake.playerId] += self._infer(stake.bet, stake.bribe)
         return self
 
     @staticmethod

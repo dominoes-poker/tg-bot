@@ -33,3 +33,9 @@ class HTTPMixin:
         async with session.post(url, data=body, raise_for_status=True) as response:
             data = await response.json()
             return RequestResult(data)
+
+    @staticmethod
+    async def put(url: str, body: Dict[str, Any], session: aiohttp.ClientSession) -> RequestResult:
+        async with session.put(url, data=body, raise_for_status=True) as response:
+            data = await response.json()
+            return RequestResult(data)

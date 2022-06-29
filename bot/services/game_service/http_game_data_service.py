@@ -61,3 +61,10 @@ class HTTPGameDataService(GameDataService, HTTPMixin):
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, stake, session)
         return result.load(loader=self._loader)
+
+    async def finish(self, game_id: int) -> Game:
+        url = f'{self.game_api_url}/{game_id}/finish'
+
+        async with aiohttp.ClientSession() as session:
+            result = await self.put(url, body=None, session=session)
+        return result.load(loader=self._loader)
