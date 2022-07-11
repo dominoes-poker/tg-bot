@@ -33,7 +33,7 @@ def main_deploy():
     ).register(app, path='/webhook')
     setup_application(app, bot.dispatcher, bot=bot)
 
-    run_app(app, host='127.0.0.1', port=8081)
+    run_app(app, host=config.host, port=config.port)
 
 
 if __name__ == "__main__":
