@@ -24,6 +24,7 @@ class BotFactory:
     @classmethod
     def _attach_dispatcher(cls, bot: DPBot, config: Config, session_manager: SessionManager) -> None:
         bot.dispatcher = Dispatcher()
+        bot.dispatcher['config'] = config
         routers = cls._create_routers(bot, session_manager)
         for router in routers:
             bot.dispatcher.include_router(router)

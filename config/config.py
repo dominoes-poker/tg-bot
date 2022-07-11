@@ -8,7 +8,7 @@ class Config(metaclass=SingletonMetaClass):
         self._token = self._get_token()
         self._data_service_url = self._get_data_service_url()
         self._host = self._get_host() or '0.0.0.0'
-        self._port = self._get_port() or '8082'
+        self._port = int(self._get_port() or 8082)
 
     @property
     def data_service_url(self) -> str:
@@ -23,7 +23,7 @@ class Config(metaclass=SingletonMetaClass):
         return self._host
 
     @property
-    def port(self) -> str:
+    def port(self) -> int:
         return self._port
 
     @staticmethod

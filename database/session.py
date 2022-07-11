@@ -1,6 +1,6 @@
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker as Sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 from common.singleton_metaclass import SingletonMetaClass
 
@@ -10,11 +10,7 @@ class SessionManager(metaclass=SingletonMetaClass):
         self._db_url = db_url
         self._engine = self._create_engine(self._db_url)
 
-    @staticmethod
-    def create_all(meta: MetaData):
-        meta.create_all()
-
-    async def async_create_all(self, meta: MetaData):
+    async def create_all(self, meta: MetaData):
         async with self._engine.begin() as connection:
             await connection.run_sync(meta.drop_all)
             await connection.run_sync(meta.create_all)
@@ -22,12 +18,12 @@ class SessionManager(metaclass=SingletonMetaClass):
     @staticmethod
     def _create_engine(db_url):
         return create_async_engine(
-            db_url,
+            f'postgresql+asyncpg://{db_url}',
             echo=True,
         )
 
     @property
-    def session(self) -> Sessionmaker:
-        return Sessionmaker(
+    def session(self) -> sessionmaker:
+        return sessionmaker(
             self._engine, expire_on_commit=False, class_=AsyncSession
         )

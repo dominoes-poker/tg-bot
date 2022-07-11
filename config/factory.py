@@ -4,7 +4,7 @@ from config.type import ConfigType
 
 class ConfigFactory:
     def get_config(self) -> Config:
-        raise NotImplementedError('The method to get config is not impimented')
+        raise NotImplementedError('The method to get config is not implemented')
 
 
 class EnvConfigFactory(ConfigFactory):
