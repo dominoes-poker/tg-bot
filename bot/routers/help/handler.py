@@ -1,12 +1,12 @@
 
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
-from bot.types import IncommingMessage
+from bot.data_types import IncomingMessage
 
 
 class HelpHandler(Handler):
 
-    async def help_handler(self, message: IncommingMessage, _: ContextService) -> None:
+    async def help_handler(self, message: IncomingMessage, _: ContextService) -> None:
         return await self.root_help(message.user_id)
 
     async def root_help(self, chat_id: int) -> None:

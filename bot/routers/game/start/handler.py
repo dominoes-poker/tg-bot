@@ -5,10 +5,10 @@ from bot.bot import DPBot
 from bot.routers.common.keyboards import keyboard_start_new_round
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
-from bot.services.game_service import GameDataService
-from bot.services.player_service import PlayerDataService
+from services.game_service import GameDataService
+from services.player_service import PlayerDataService
 from bot.states import GameState, RoundState
-from bot.types import IncommingMessage
+from bot.data_types import IncomingMessage
 
 
 class StartGameHandler(Handler):
@@ -19,7 +19,7 @@ class StartGameHandler(Handler):
         self._player_data_service = player_data_service
         self._game_data_service = game_data_service
 
-    async def ask_participants(self, message: IncommingMessage, _: ContextService) -> None:
+    async def ask_participants(self, message: IncomingMessage, _: ContextService) -> None:
         await self.bot.send(
             chat_id=message.user_id,
             text='Ok, lets start a new game. ' \
@@ -29,7 +29,7 @@ class StartGameHandler(Handler):
         )
         return GameState.WAIT_PLAYER_USERNAMES
 
-    async def handle_participant(self, message: IncommingMessage,
+    async def handle_participant(self, message: IncomingMessage,
                                  context_service: ContextService) -> None:
         player_usernames = self._process_names(message.text.split(','))
         player = await self._player_data_service.get_player_by_identificator(message.user_id)
@@ -45,15 +45,14 @@ class StartGameHandler(Handler):
             )
         players = await self._player_data_service.get_players_by_username(player_usernames)
         if len(players) != len(player_usernames):
-            found_usernams = {player.username for player in players}
+            found_usernames = {player.username for player in players}
             strange_usernames = filter(
-                lambda username: username not in found_usernams,
+                lambda username: username not in found_usernames,
                 player_usernames
             )
             return await self.bot.send(
                 chat_id=message.user_id,
-                text=f'I could not find users: `{"`, `".join(strange_usernames)}`. '\
-                      'Please, check and send correct',
+                text=f'I could not find users: `{"`, `".join(strange_usernames)}`. Please, check and send correct',
                 reply_markup=ReplyKeyboardRemove
             )
         game = await self._game_data_service.create(players=players)

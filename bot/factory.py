@@ -8,30 +8,31 @@ from bot.bot import DPBot
 from bot.routers import (DPRouter, create_player_register_router,
                          create_root_game_router, create_wellcome_router,
                          create_help_router)
-from bot.services.game_service.factory import get_game_data_service
-from bot.services.player_service import get_player_data_service
+from database.session import SessionManager
+from services.game_service.factory import get_game_data_service
+from services.player_service import get_player_data_service
 
 
 class BotFactory:
 
     @classmethod
-    def create_bot(cls, config: Config) -> DPBot:
+    def create_bot(cls, config: Config, session_manager: SessionManager) -> DPBot:
         bot = DPBot(config.token)
-        cls._attach_dispatcher(bot, config)
+        cls._attach_dispatcher(bot, config, session_manager)
         return bot
 
     @classmethod
-    def _attach_dispatcher(cls, bot: DPBot, config: Config) -> None:
+    def _attach_dispatcher(cls, bot: DPBot, config: Config, session_manager: SessionManager) -> None:
         bot.dispatcher = Dispatcher()
-        routers = cls._create_routers(bot, config)
+        routers = cls._create_routers(bot, session_manager)
         for router in routers:
             bot.dispatcher.include_router(router)
 
     @classmethod
-    def _create_routers(cls, bot: DPBot, config: Config) -> Tuple[DPRouter]:
+    def _create_routers(cls, bot: DPBot, session_manager: SessionManager) -> Tuple[DPRouter, ...]:
 
-        player_data_service = get_player_data_service(config.data_service_url)
-        game_data_service = get_game_data_service(config.data_service_url)
+        player_data_service = get_player_data_service(session_manager)
+        game_data_service = get_game_data_service(session_manager)
 
         return (
             create_wellcome_router(bot, player_data_service),

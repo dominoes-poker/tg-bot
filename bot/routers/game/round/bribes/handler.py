@@ -9,9 +9,9 @@ from bot.routers.common.keyboards import (KEYBOARD_GAME_OVER,
 from bot.routers.handler import Handler
 from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
-from bot.services.game_service import GameDataService
+from services.game_service import GameDataService
 from bot.states import RootState, RoundState, SetBribesState
-from bot.types import Game, IncommingMessage, Player
+from bot.data_types import Game, IncomingMessage, Player, Stake
 
 
 class BribesHandler(Handler):
@@ -19,7 +19,7 @@ class BribesHandler(Handler):
         super().__init__(bot)
         self._game_data_service = game_data_service
 
-    async def ask_player_bribes(self, message: IncommingMessage,
+    async def ask_player_bribes(self, message: IncomingMessage,
                                 context_service: ContextService) -> State:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
@@ -40,8 +40,8 @@ class BribesHandler(Handler):
         )
         return SetBribesState.BRIBE
 
-    async def handle_bribe(self, message: IncommingMessage,
-                           context_service: ContextService) -> None:
+    async def handle_bribe(self, message: IncomingMessage,
+                           context_service: ContextService) -> State:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
 
@@ -57,7 +57,7 @@ class BribesHandler(Handler):
         players = {player.id: player.username for player in game.players}
 
         losers = {
-            stake.playerId: players[stake.playerId]
+            stake.player_id: players[stake.player_id]
             for stake in stakes if stake.bribe is None
         }
 
@@ -89,14 +89,15 @@ class BribesHandler(Handler):
         return RootState.ON_HOLD
 
     async def _set_bribe(self, player_id: int, bribe: int, game: Game) -> Game:
-        stake = dict(
-            playerId=player_id,
-            bribe = bribe,
-            roundId=game.last_round.number,
+        stake = Stake(
+            player_id=player_id,
+            bribe=bribe,
+            round_id=game.last_round.id,
         )
         return await self._game_data_service.set_bribe(game.id, stake)
 
-    def _get_bribes_variants(self, game: Game) -> Optional[List[int]]:
+    @staticmethod
+    def _get_bribes_variants(game: Game) -> Optional[List[int]]:
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
         taken = sum(stake.bribe for stake in stakes if stake.bribe is not None)
 
@@ -107,11 +108,10 @@ class BribesHandler(Handler):
 
         return list(range(remaining_bribes + 1))
 
-    def _get_player_to_ask_results(self, game: Game) -> Optional[Player]:
-        if not game.rounds or not game.last_round.stakes:
-            return [player.username for player in game.players]
+    @staticmethod
+    def _get_player_to_ask_results(game: Game) -> Optional[Player]:
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
-        players_ask_results = {stake.playerId for stake in stakes if stake.bribe is None}
+        players_ask_results = {stake.player_id for stake in stakes if stake.bribe is None}
 
         for player in game.players:
             if player.id in players_ask_results:

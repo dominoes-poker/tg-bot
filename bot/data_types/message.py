@@ -1,11 +1,11 @@
 
-from typing import Union
+from typing import Union, Type
 
 from aiogram.types import (Chat, Message, ReplyKeyboardMarkup,
                            ReplyKeyboardRemove, TelegramObject)
 
 
-class IncommingMessage:
+class IncomingMessage:
     def __init__(self, tg_object: TelegramObject) -> None:
         self._tg_object = tg_object
 
@@ -21,7 +21,8 @@ class IncommingMessage:
     def user_id(self) -> int:
         raise NotImplementedError
 
-class IncommingMessageWrapper(IncommingMessage):
+
+class IncomingMessageWrapper(IncomingMessage):
     def __init__(self, tg_object: Message) -> None:
         super().__init__(tg_object)
 
@@ -38,4 +39,4 @@ class IncommingMessageWrapper(IncommingMessage):
         return self._tg_object.from_user.id
 
 
-ReplyMarkupType = Union[ReplyKeyboardMarkup, ReplyKeyboardRemove]
+ReplyMarkupType = Union[Type[ReplyKeyboardMarkup], Type[ReplyKeyboardRemove]]

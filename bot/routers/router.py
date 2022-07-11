@@ -7,7 +7,7 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.dispatcher.fsm.state import State
 from aiogram.types import Message, TelegramObject
 from bot.services.context_service.factory import create_context_service
-from bot.types import IncommingMessage, IncommingMessageWrapper
+from bot.data_types import IncomingMessage, IncomingMessageWrapper
 
 
 class EventType(Enum):
@@ -20,9 +20,9 @@ CallbackType = Callable[[Message, FSMContext], State]
 class DPRouter(Router):
 
     @staticmethod
-    def create_message(tg_object: TelegramObject) -> IncommingMessage:
+    def create_message(tg_object: TelegramObject) -> IncomingMessage:
         if isinstance(tg_object, Message):
-            return IncommingMessageWrapper(tg_object=tg_object)
+            return IncomingMessageWrapper(tg_object=tg_object)
         raise TypeError
 
     def _get_observer_by_event_type(self, event_type: EventType) -> TelegramEventObserver:

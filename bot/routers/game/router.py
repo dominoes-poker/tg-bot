@@ -3,8 +3,8 @@ from bot.routers.game.finish import create_finish_game_router
 from bot.routers.game.start import create_start_game_router
 from bot.routers.game.round import create_round_router
 from bot.routers.router import DPRouter
-from bot.services.game_service import GameDataService
-from bot.services.player_service import PlayerDataService
+from services.game_service import GameDataService
+from services.player_service import PlayerDataService
 
 
 def create_root_game_router(bot: DPBot,

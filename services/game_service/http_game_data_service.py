@@ -1,21 +1,21 @@
 
 from typing import List
 import aiohttp
-from bot.services.game_service.game_data_service import GameDataService
-from bot.services.httm_mixin import HTTPMixin
-from bot.services.loaders.game_loader import GameLoader
-from bot.types import Player, Game, Round, Stake
-
+from services.game_service.game_data_service import GameDataService
+from services.httm_mixin import HTTPMixin
+# from bot.services.loaders.game_loader import GameLoader
+from bot.data_types import Player, Game, Round, Stake
+GameLoader = None
 
 def round_to_dict(round_: Round) -> dict:
     return {
-        'gameId': round_.gameId,
-        'numberOfDice':round_.numberOfDice,
+        'gameId': round_.game_id,
+        'numberOfDice':round_.number_of_dice,
     }
 
 def stake_to_dict(stake: Stake) -> dict:
     return {
-        'playerId': stake.playerId,
+        'playerId': stake.player_id,
         'bet':stake.bet,
         'bribe':stake.bribe,
     }
@@ -42,14 +42,14 @@ class HTTPGameDataService(GameDataService, HTTPMixin):
         return result.load(loader=self._loader)
 
     async def start_new_round(self, round_: Round) -> Game:
-        url = f'{self.game_api_url}/{round_.gameId}/new-round'
+        url = f'{self.game_api_url}/{round_.game_id}/new-round'
         body = round_to_dict(round_)
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, body, session)
         return result.load(loader=self._loader.round_loader)
 
     async def set_bet(self, game_id: int, stake: Stake) -> Game:
-        url = f'{self.game_api_url}/{game_id}/round/{stake.roundId}/bet'
+        url = f'{self.game_api_url}/{game_id}/round/{stake.round_id}/bet'
         body = stake_to_dict(stake)
         async with aiohttp.ClientSession() as session:
             result = await self.post(url, body, session)

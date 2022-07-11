@@ -3,11 +3,11 @@ from itertools import chain
 from typing import Callable, Dict, Iterable, List, Optional
 
 import aiohttp
-from bot.services.httm_mixin import HTTPMixin
-from bot.services.loaders import PlayerLoader
-from bot.services.player_service.player_data_service import PlayerDataService
-from bot.types import Player
-
+from services.httm_mixin import HTTPMixin
+# from bot.services.loaders import PlayerLoader
+from services.player_service.player_data_service import PlayerDataService
+from bot.data_types import Player
+PlayerLoader = None
 
 def player_to_dict(player: Player) -> Dict:
     return {

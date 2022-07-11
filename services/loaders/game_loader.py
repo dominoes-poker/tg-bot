@@ -1,13 +1,12 @@
 
 from typing import Any, Dict
-from bot.services.loaders.player_loader import PlayerLoader
-from bot.services.loaders.loader import Loader
-from bot.services.loaders.round_loader import RoundLoader
-from bot.types import Game
+# from services.loaders.player_loader import PlayerLoader
+from services.loaders.round_loader import RoundLoader
+from bot.data_types import Game
 
 
-class GameLoader(Loader):
-    def __init__(self, player_loader: PlayerLoader,
+class GameLoader:
+    def __init__(self, player_loader,
                        round_loader: RoundLoader):
         super().__init__()
         self._player_loader = player_loader

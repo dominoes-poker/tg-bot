@@ -7,9 +7,9 @@ from bot.routers.common.keyboards import (KEYBOARD_ENTER_ROUND_RESULTS,
 from bot.routers.handler import Handler
 from bot.routers.utils import get_number_of_dices
 from bot.services.context_service import ContextService
-from bot.services.game_service import GameDataService
+from services.game_service import GameDataService
 from bot.states import MakeBetsState, RoundState
-from bot.types import Game, IncommingMessage, Stake
+from bot.data_types import Game, IncomingMessage, Stake
 
 
 class BetsHandler(Handler):
@@ -18,7 +18,7 @@ class BetsHandler(Handler):
         super().__init__(bot)
         self._game_data_service = game_data_service
 
-    async def ask_who_make_bet(self, message: IncommingMessage,
+    async def ask_who_make_bet(self, message: IncomingMessage,
                                context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
@@ -32,7 +32,7 @@ class BetsHandler(Handler):
         )
         return MakeBetsState.USERNAME
 
-    async def handle_username(self, message: IncommingMessage,
+    async def handle_username(self, message: IncomingMessage,
                               context_service: ContextService) -> None:
 
         game_id = await context_service.get_current_game_id()
@@ -44,13 +44,12 @@ class BetsHandler(Handler):
 
         await self._bot.send(
             chat_id=message.user_id,
-            text=f'Whow many does `{username}` bet?',
+            text=f'Who many does `{username}` bet?',
             reply_markup=keyboard_from_data(self._get_variants_to_bet(game))
         )
         return MakeBetsState.BET
 
-
-    async def handle_bet(self, message: IncommingMessage,
+    async def handle_bet(self, message: IncomingMessage,
                          context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
@@ -59,9 +58,9 @@ class BetsHandler(Handler):
         player = next(filter(lambda p: p.username == username, game.players))
 
         stake = Stake(
-            playerId=player.id,
-            bet = int(message.text),
-            roundId=game.last_round.number,
+            player_id=player.id,
+            bet=int(message.text),
+            round_id=game.last_round.id,
         )
         game = await self._game_data_service.set_bet(game_id, stake)
         if len(game.last_round.stakes) < len(game.players):
@@ -74,13 +73,17 @@ class BetsHandler(Handler):
         )
         return RoundState.BRIBES
 
-    def _get_variants_to_bet(self, game: Game) -> List[int]:
-        return list(range(get_number_of_dices(game, game.last_round.number) + 1))
+    @staticmethod
+    def _get_variants_to_bet(game: Game) -> List[int]:
+        last_round = game.last_round
+        number_of_dices = get_number_of_dices(game, last_round.number) if last_round else 1
+        return list(range(number_of_dices + 1))
 
-    def _get_players_to_bet(self, game: Game) -> List[str]:
+    @staticmethod
+    def _get_players_to_bet(game: Game) -> List[str]:
         if not game.rounds or not game.last_round.stakes:
             return [player.username for player in game.players]
-        players_made_bets = {stake.playerId for stake in game.last_round.stakes}
+        players_made_bets = {stake.player_id for stake in game.last_round.stakes}
         return [
             player.username
             for player in game.players

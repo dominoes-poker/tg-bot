@@ -1,16 +1,16 @@
 from typing import Dict, Any
 
-from bot.services.loaders.loader import Loader
-from bot.types import Stake
+# from bot.services.loaders.loader import Loader
+from bot.data_types import Stake
 
 
-class StakeLoader(Loader):
+class StakeLoader:
 
     def __call__(self, data: Dict[Any, Any]) -> Stake:
         return Stake(
             id=data['id'],
-            roundId=data['roundId'],
-            playerId=data['playerId'],
+            round_id=data['roundId'],
+            player_id=data['playerId'],
             bet=data['bet'],
             bribe=data['bribe']
         )

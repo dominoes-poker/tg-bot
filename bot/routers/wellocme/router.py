@@ -1,7 +1,7 @@
 from bot.bot import DPBot
 from bot.routers.wellocme.handler import WellcomeHandler
 from bot.routers.router import DPRouter
-from bot.services.player_service import PlayerDataService
+from services.player_service import PlayerDataService
 
 
 def setup_router(router: DPRouter, handler: WellcomeHandler) -> None:

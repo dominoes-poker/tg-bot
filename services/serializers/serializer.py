@@ -2,9 +2,9 @@ from typing import Any, Dict
 
 
 
-class Loader:
+class Serializer:
     def __init__(self) -> None:
         ...
 
-    def __call__(self, data: Dict[Any, Any]) -> Any:
+    def __call__(self, data: Any) -> Any:
         raise NotImplementedError

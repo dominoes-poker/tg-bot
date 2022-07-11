@@ -2,7 +2,7 @@ from aiogram import F
 from bot.bot import DPBot
 from bot.routers.common.keyboards import BUTTON_NO, BUTTON_YES
 from bot.routers.router import DPRouter
-from bot.services.player_service import PlayerDataService
+from services.player_service import PlayerDataService
 from bot.states import RootState, TelegramPlayerRegisterState
 from bot.routers.player_register.telegram_player_register.handler import (
         TelegramPlayerRegisterHandler

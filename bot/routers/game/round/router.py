@@ -6,7 +6,7 @@ from bot.routers.game.round.bribes import create_bribes_router
 from bot.routers.game.round.handler import RoundHandler
 from bot.routers.game.round.statistics import create_statistics_router
 from bot.routers.router import DPRouter
-from bot.services.game_service import GameDataService
+from services.game_service import GameDataService
 from bot.states import RoundState
 
 

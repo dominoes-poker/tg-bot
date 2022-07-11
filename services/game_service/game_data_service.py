@@ -1,7 +1,7 @@
 from typing import List
 
-from bot.services.data_service import DataService
-from bot.types import Game, Player, Round, Stake
+from services.data_service import DataService
+from bot.data_types import Game, Player, Round, Stake
 
 
 class GameDataService(DataService):

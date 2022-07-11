@@ -1,9 +1,9 @@
 from typing import Any, Dict
 import aiohttp
 
-from bot.services.loaders import Loader
+# from services.loaders import Loader
 
-
+Loader = None
 class RequestResult:
     def __init__(self, data: Dict[Any, Any]) -> None:
         self._data = data

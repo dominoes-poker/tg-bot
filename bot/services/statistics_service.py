@@ -1,6 +1,6 @@
 from typing import Iterable, Tuple, List, Union
-from bot.types import Game
-from bot.types.data_types import Player, Round
+from bot.data_types import Game
+from bot.data_types.data_types import Player, Round
 
 
 class Statistics:
@@ -10,7 +10,7 @@ class Statistics:
 
     def update_from_round(self, round_: Round) -> 'Statistics':
         for stake in round_.stakes:
-            self._statistics[stake.playerId] += self._infer(stake.bet, stake.bribe)
+            self._statistics[stake.player_id] += self._infer(stake.bet, stake.bribe)
         return self
 
     @staticmethod

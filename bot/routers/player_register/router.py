@@ -6,7 +6,7 @@ from bot.routers.player_register.external_player_register import (
         create_external_player_register_router
     )
 from bot.routers.router import DPRouter
-from bot.services.player_service import PlayerDataService
+from services.player_service import PlayerDataService
 
 
 

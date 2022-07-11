@@ -4,7 +4,7 @@ from bot.bot import DPBot
 from bot.routers.common.keyboards import BUTTON_FINISH_GAME
 from bot.routers.game.finish.handler import FinishGameHandler
 from bot.routers.router import DPRouter
-from bot.services.game_service import GameDataService
+from services.game_service import GameDataService
 
 
 def setup_router(router: DPRouter, handler: FinishGameHandler) -> None:

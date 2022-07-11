@@ -10,7 +10,7 @@ class EnvConfigFactory(ConfigFactory):
     def get_config(self) -> EnvConfig:
         return EnvConfig()
 
-def create_config(config_type: ConfigType) -> ConfigType:
+def create_config(config_type: ConfigType) -> Config:
     factory = None
 
     if config_type == ConfigType.ENV:

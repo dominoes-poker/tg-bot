@@ -4,11 +4,11 @@ from typing import List
 from bot.bot import DPBot
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
-from bot.services.game_service import GameDataService
+from services.game_service import GameDataService
 from bot.services.statistics_service import (GameStatiticsService,
                                              RoundStatiticsService,
                                              StatisticsPresentService)
-from bot.types import Game, IncommingMessage, Player, Round
+from bot.data_types import Game, IncomingMessage, Player, Round
 
 
 class StatisticsHandler(Handler):
@@ -17,7 +17,7 @@ class StatisticsHandler(Handler):
         super().__init__(bot)
         self._game_data_service = game_data_service
 
-    async def show_round_statistics(self, message: IncommingMessage,
+    async def show_round_statistics(self, message: IncomingMessage,
                                     context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
@@ -30,7 +30,7 @@ class StatisticsHandler(Handler):
             text=text
         )
 
-    async def show_game_statistics(self, message: IncommingMessage,
+    async def show_game_statistics(self, message: IncomingMessage,
                                    context_service: ContextService) -> None:
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)

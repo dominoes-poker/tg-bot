@@ -2,7 +2,7 @@ from typing import Optional
 from aiogram.dispatcher.fsm.state import State
 from aiogram.dispatcher.fsm.context import FSMContext
 
-from bot.types import Game, Player
+from bot.data_types import Game, Player
 
 
 class ContextService:

@@ -2,7 +2,7 @@ from aiogram import F
 
 from bot.bot import DPBot
 from bot.routers.router import DPRouter
-from bot.services.game_service import GameDataService
+from services.game_service import GameDataService
 from bot.states import MakeBetsState
 from bot.routers.game.round.bets.handler import BetsHandler
 

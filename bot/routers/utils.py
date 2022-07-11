@@ -1,4 +1,4 @@
-from bot.types import Game
+from bot.data_types import Game
 
 
 def get_number_of_dices(game: Game, round_number: int) -> int:

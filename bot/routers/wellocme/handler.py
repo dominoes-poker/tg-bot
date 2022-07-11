@@ -4,9 +4,9 @@ from bot.bot import DPBot
 from bot.routers.common.keyboards import KEYBOARD_ON_HOLD, KEYBOARD_YES_NO
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
-from bot.services.player_service import PlayerDataService
+from services.player_service import PlayerDataService
 from bot.states import RootState
-from bot.types import IncommingMessage
+from bot.data_types import IncomingMessage
 
 
 class WellcomeHandler(Handler):
@@ -14,9 +14,9 @@ class WellcomeHandler(Handler):
         super().__init__(bot)
         self._player_data_service: PlayerDataService = player_data_service
 
-    async def handle_enter(self, message: IncommingMessage, _: ContextService) -> State:
+    async def handle_enter(self, message: IncomingMessage, _: ContextService) -> State:
         identificator = message.user_id
-        name =message.chat.first_name
+        name = message.chat.first_name
         reply_message = (
             f'Nice to meet you, {name}! I am a bot that helps you manage the Poker on Bones game! '
         )

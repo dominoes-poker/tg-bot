@@ -3,7 +3,7 @@ from bot.bot import DPBot
 from bot.routers.common.keyboards import BUTTON_SHOW_GAME_STATISTICS, BUTTON_SHOW_ROUND_STATISTICS
 from bot.routers.game.round.statistics.handler import StatisticsHandler
 from bot.routers.router import DPRouter
-from bot.services.game_service import GameDataService
+from services.game_service import GameDataService
 from bot.states import RoundState
 
 

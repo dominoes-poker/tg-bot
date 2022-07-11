@@ -1,10 +1,11 @@
 from typing import Optional
-from aiogram import Bot as bot, Dispatcher
+from aiogram import Bot, Dispatcher
 
-from bot.types import ReplyMarkupType
+from bot.data_types import ReplyMarkupType
+
 
 # Dominoes Poker
-class DPBot(bot):
+class DPBot(Bot):
     def __init__(self, token: str) -> None:
         super().__init__(token)
         self._dispatcher: Dispatcher = None

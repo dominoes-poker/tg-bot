@@ -6,9 +6,9 @@ from bot.bot import DPBot
 from bot.routers.common.keyboards import KEYBOARD_ON_HOLD
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
-from bot.services.player_service import PlayerDataService
+from services.player_service import PlayerDataService
 from bot.states import RootState
-from bot.types import IncommingMessage, Player
+from bot.data_types import IncomingMessage, Player
 
 
 class PlayerRegisterHandler(Handler):
@@ -20,7 +20,7 @@ class PlayerRegisterHandler(Handler):
         )
 
     async def _register_player(self, chat_id: int, identificator: int,
-                               username: str, _: ContextService) -> State:
+                               username: str) -> State:
         player_data = Player(identificator=identificator, username=username)
         await self._player_data_service.register(player_data)
 
@@ -31,7 +31,7 @@ class PlayerRegisterHandler(Handler):
         )
         return RootState.ON_HOLD
 
-    async def decline_registration(self, message: IncommingMessage, _: ContextService) -> State:
+    async def decline_registration(self, message: IncomingMessage, _: ContextService) -> State:
         await self.bot.send(
             chat_id = message.user_id,
             text='What do you want to do?',
@@ -46,7 +46,7 @@ class PlayerRegisterHandler(Handler):
     def _is_valid_username(self, username: str) -> bool:
         return bool(self._allow_username_pattern.match(username))
 
-    async def ask_username(self, message: IncommingMessage, _: ContextService) -> None:
+    async def ask_username(self, message: IncomingMessage, _: ContextService) -> None:
         await self.bot.send(
             chat_id = message.user_id,
             text='Send me username',
