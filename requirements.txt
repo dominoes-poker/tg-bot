@@ -1,6 +1,5 @@
 aiogram>=3.0.0b3
 aiohttp
 sqlalchemy
-aiosqlite
 greenlet
 asyncpg
