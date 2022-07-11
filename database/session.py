@@ -10,7 +10,11 @@ class SessionManager(metaclass=SingletonMetaClass):
         self._db_url = db_url
         self._engine = self._create_engine(self._db_url)
 
-    async def create_all(self, meta: MetaData):
+    @staticmethod
+    def create_all(meta: MetaData):
+        meta.create_all()
+
+    async def async_create_all(self, meta: MetaData):
         async with self._engine.begin() as connection:
             await connection.run_sync(meta.drop_all)
             await connection.run_sync(meta.create_all)
