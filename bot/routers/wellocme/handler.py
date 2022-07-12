@@ -19,7 +19,7 @@ class WellcomeHandler(Handler):
         name = message.chat.first_name
 
         reply_message = (
-            f'Nice to meet you, {name}! I am a bot that helps you manage the Poker on Bones game! '
+            f'Nice to meet you, {name}! I am a bot that helps you manage the Dominoes Poker game! '
         )
 
         player = await self._player_data_service.get_player_by_identificator(identificator)
