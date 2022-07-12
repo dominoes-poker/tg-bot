@@ -29,7 +29,7 @@ class DPBot(Bot):
             parse_mode='Markdown',
         )
 
-    async def start_polling(self):
+    async def start_polling(self, **kwargs):
         if not self.dispatcher:
             raise RuntimeError('Dispatcher was not added to the bot')
-        return await self.dispatcher.start_polling(self)
+        return await self.dispatcher.start_polling(self, **kwargs)
