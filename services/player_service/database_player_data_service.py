@@ -1,8 +1,9 @@
 from typing import List, Optional, Union
 
-from sqlalchemy import select
+from sqlalchemy import select, exc
 
 from bot.data_types import Player
+from bot.errors.factories import create_db_player_error
 
 from database.models import Player as DBPlayer
 from database.session import SessionManager
@@ -13,20 +14,10 @@ from services.serializer import Serializer
 
 
 class PlayerSerializer(Serializer):
-    @staticmethod
-    def convert(player, to_type):
-        result = to_type(
-            username=player.username,
-            identificator=str(player.identificator)
-        )
-        if player.id is not None:
-            result.id = id
-        return result
-
     def serialize(self, player: Player) -> DBPlayer:
         return DBPlayer(
             username=player.username,
-            identificator=str(player.identificator)
+            identificator=player.identificator
         )
     
     def deserialize(self, player: DBPlayer) -> Optional[Player]:
@@ -46,12 +37,12 @@ class DataBasePlayerDataService(PlayerDataService, DatabaseMixin):
 
     async def register(self, player: Player) -> Player:
         db_player = self._serializer.serialize(player)
-        async with self._session_manager.session() as session:
-            async with session.begin():
-                session.add_all([
-                    db_player
-                ])
-        
+        try:
+            async with self._session_manager.session() as session:
+                async with session.begin():
+                    session.add_all([db_player])
+        except exc.IntegrityError as error:
+            raise create_db_player_error(error)
         return self._serializer.deserialize(db_player)
 
     async def get_player_by_identificator(self, identificator: Union[str, int]) -> List[Player]:

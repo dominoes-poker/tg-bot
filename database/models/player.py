@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 from database.models.base import BaseModel
 from sqlalchemy import Column, Index, Integer, String, UniqueConstraint, orm
@@ -8,8 +8,8 @@ class Player(BaseModel):
     __tablename__ = 'players'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    username =  Column(String, nullable=False)
-    identificator = Column(String, nullable=True)
+    username = Column(String, nullable=False)
+    identificator = Column(String, nullable=True, default=None)
 
     __table_args__ = (
         UniqueConstraint('username', name='_username'),
@@ -21,7 +21,7 @@ class Player(BaseModel):
         ),
     )
 
-    def __init__(self, username: str, identificator: Union[str, str]) -> None:
+    def __init__(self, username: str, identificator: Optional[str]) -> None:
         self.username = username
         self.identificator = identificator
     

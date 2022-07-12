@@ -18,10 +18,6 @@ class WellcomeHandler(Handler):
         identificator = message.user_id
         name = message.chat.first_name
 
-        await self.bot.send(
-            chat_id=message.chat.id,
-            text='Hello',
-        )
         reply_message = (
             f'Nice to meet you, {name}! I am a bot that helps you manage the Poker on Bones game! '
         )

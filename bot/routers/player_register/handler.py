@@ -1,8 +1,10 @@
 import re
+from typing import Optional
 
 from aiogram.dispatcher.fsm.state import State
 from aiogram.types import ReplyKeyboardMarkup
 from bot.bot import DPBot
+from bot.errors.errors import BaseBotError
 from bot.routers.common.keyboards import KEYBOARD_ON_HOLD
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
@@ -19,10 +21,17 @@ class PlayerRegisterHandler(Handler):
             r'^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$'
         )
 
-    async def _register_player(self, chat_id: int, identificator: int,
-                               username: str) -> State:
+    async def _register_player(self, chat_id: int, identificator: Optional[str],
+                               username: str) -> Optional[State]:
         player_data = Player(identificator=identificator, username=username)
-        await self._player_data_service.register(player_data)
+        try:
+            await self._player_data_service.register(player_data)
+        except BaseBotError as error:
+            await self.bot.send(
+                chat_id=chat_id,
+                text=error.message
+            )
+            return
 
         await self.bot.send(
             chat_id=chat_id,
@@ -33,7 +42,7 @@ class PlayerRegisterHandler(Handler):
 
     async def decline_registration(self, message: IncomingMessage, _: ContextService) -> State:
         await self.bot.send(
-            chat_id = message.user_id,
+            chat_id=message.user_id,
             text='What do you want to do?',
             reply_markup=KEYBOARD_ON_HOLD
         )
@@ -48,7 +57,7 @@ class PlayerRegisterHandler(Handler):
 
     async def ask_username(self, message: IncomingMessage, _: ContextService) -> None:
         await self.bot.send(
-            chat_id = message.user_id,
+            chat_id=message.user_id,
             text='Send me username',
             reply_markup=ReplyKeyboardMarkup
         )
@@ -58,7 +67,7 @@ class PlayerRegisterHandler(Handler):
                   'and contains letters or numbers. ' \
                   'Please try again'
         await self.bot.send(
-                chat_id = chat_id,
+                chat_id=chat_id,
                 text=message,
                 reply_markup=ReplyKeyboardMarkup
             )

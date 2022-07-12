@@ -1,3 +1,7 @@
+from typing import Optional
+
+from aiogram.dispatcher.fsm.state import State
+
 from bot.routers.common.keyboards import KEYBOARD_YES_NO
 from bot.routers.player_register.handler import PlayerRegisterHandler
 from bot.services.context_service import ContextService
@@ -19,22 +23,21 @@ class TelegramPlayerRegisterHandler(PlayerRegisterHandler):
         )
         return TelegramPlayerRegisterState.WHAT_USERNAME_USE
 
-
     async def use_tg_username(self, message: IncomingMessage,
-                              context_service: ContextService) -> None:
+                              _: ContextService) -> State:
         username = message.chat.username
-        identificator = message.user_id
+        identificator = str(message.user_id)
         return await self._register_player(message.user_id, identificator, username)
 
     async def ask_new_username(self, message: IncomingMessage,
-                               context_service: ContextService) -> None:
+                               context_service: ContextService) -> State:
         await self.ask_username(message, context_service)
         return TelegramPlayerRegisterState.WAIT_USERNAME
 
     async def use_new_username(self, message: IncomingMessage,
-                               context_service: ContextService) -> None:
+                               _: ContextService) -> Optional[State]:
         username = message.text
-        identificator = message.user_id
+        identificator = str(message.user_id)
         if not self._allow_username_pattern.match(username):
             return await self._bad_username_response(message.user_id)
 
@@ -42,5 +45,5 @@ class TelegramPlayerRegisterHandler(PlayerRegisterHandler):
 
     @staticmethod
     def _get_final_message(username: str) -> str:
-        return f'Congratulations - you have been registrated as `{username}`!' \
+        return f'Congratulations - you have been registered as `{username}`! ' \
                 'What do you want next?'
