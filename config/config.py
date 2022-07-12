@@ -40,7 +40,7 @@ class Config(metaclass=SingletonMetaClass):
 
     @classmethod
     def _get_data_service_url(cls) -> str:
-        return cls._get_required_var('DATABASE_URL')
+        return cls._get_required_var('DATABASE_URI')
 
     @classmethod
     def _get_host(cls) -> str:
