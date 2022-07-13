@@ -25,7 +25,8 @@ class RoundHandler(Handler):
             return list(
                 sorted(
                     game.rounds,
-                    key=lambda round_: round_.number
+                    key=lambda round_: round_.number,
+                    reverse=True
                     )
                 )[0].number + 1
         return 1
@@ -35,10 +36,10 @@ class RoundHandler(Handler):
         game_id = await context_service.get_current_game_id()
         game = await self._game_data_service.get_game(game_id)
 
-        next_round = self._get_next_round_number(game)
+        next_round_number = self._get_next_round_number(game)
         new_round = Round(
             game_id=game_id,
-            number_of_dominoes=get_number_of_dices(game, next_round),
+            number_of_dominoes=get_number_of_dices(game, next_round_number),
             number=self._get_next_round_number(game)
         )
         await self._game_data_service.start_new_round(new_round)
