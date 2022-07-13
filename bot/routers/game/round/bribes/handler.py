@@ -113,8 +113,8 @@ class BribesHandler(Handler):
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
         players_ask_results = [stake.player_id for stake in stakes if stake.bribe is None]
 
-        for player in game.players:
-            if player.id in players_ask_results:
-                return player
+        for player_id in players_ask_results:
+            player = next(filter(lambda p: p.id == player_id, game.players))
+            return player
         return None
         

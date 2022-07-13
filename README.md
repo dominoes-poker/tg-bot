@@ -1,8 +1,7 @@
 # Poker on Bones telegram bot
 
-The telegram bot to manage the dominoes poker game 
+The telegram bot to manage the domino poker game 
 
-## How to start to play?
+## How to start the Game?
 
 1. Send `/start` to the bot
-2. Register a new player
