@@ -1,6 +1,7 @@
 from aiogram.dispatcher.fsm.state import State
 
 from bot.bot import DPBot
+from bot.messages.service import MessageService
 from bot.routers.common.keyboards import KEYBOARD_ON_HOLD, KEYBOARD_YES_NO
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
@@ -10,23 +11,19 @@ from bot.data_types import IncomingMessage
 
 
 class WellcomeHandler(Handler):
-    def __init__(self, bot: DPBot, player_data_service: PlayerDataService) -> None:
-        super().__init__(bot)
+    def __init__(self, bot: DPBot, message_service: MessageService, player_data_service: PlayerDataService) -> None:
+        super().__init__(bot, message_service)
         self._player_data_service: PlayerDataService = player_data_service
 
     async def handle_enter(self, message: IncomingMessage, _: ContextService) -> State:
         identificator = message.user_id
         name = message.chat.first_name
 
-        reply_message = (
-            f'Nice to meet you, {name}! I am a bot that helps you manage the Dominoes Poker game! '
-        )
+        reply_message = self._message_service.get_formatted_message('wellcome', name=name)
 
         player = await self._player_data_service.get_player_by_identificator(identificator)
         if not player:
-            reply_message += (
-                ' I have not found you in my annals of history. Can I register you as a new player?'
-            )
+            reply_message += f' {self._message_service.no_registered_user}'
             reply_markup = KEYBOARD_YES_NO
             state = RootState.TG_PLAYER_REGISTRATION
         else:

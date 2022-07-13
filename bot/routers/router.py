@@ -1,11 +1,13 @@
 from enum import Enum
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, Coroutine
 
 from aiogram import Router
 from aiogram.dispatcher.event.telegram import FilterType, TelegramEventObserver
 from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.dispatcher.fsm.state import State
 from aiogram.types import Message, TelegramObject
+
+from bot.services.context_service import ContextService
 from bot.services.context_service.factory import create_context_service
 from bot.data_types import IncomingMessage, IncomingMessageWrapper
 
@@ -14,7 +16,7 @@ class EventType(Enum):
     MESSAGE = 'message'
 
 
-CallbackType = Callable[[Message, FSMContext], State]
+CallbackType = Callable[[Message, ContextService], Coroutine[Any, Any, State]]
 
 
 class DPRouter(Router):
@@ -37,7 +39,7 @@ class DPRouter(Router):
                       **bound_filters: Any,
                       ) -> CallbackType:
 
-        async def callback(tg_object: TelegramObject, state: FSMContext):
+        async def callback(tg_object: TelegramObject, state: FSMContext) -> None:
             message = self.create_message(tg_object)
             context_service = create_context_service(state)
 

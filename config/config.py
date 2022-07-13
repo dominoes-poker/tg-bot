@@ -1,14 +1,19 @@
 import os
+from pathlib import Path
 
 from common import SingletonMetaClass
 
 
 class Config(metaclass=SingletonMetaClass):
     def __init__(self) -> None:
+        self._root_path = Path(__file__).parent.parent.resolve()
         self._token = self._get_token()
         self._data_service_url = self._get_data_service_url()
-        self._host = self._get_host() or '0.0.0.0'
-        self._port = int(self._get_port() or 8082)
+        self._messages_path = self._root_path / 'bot' / 'messages' / 'en'
+
+    @property
+    def message_path(self) -> Path:
+        return self._messages_path
 
     @property
     def data_service_url(self) -> str:
@@ -17,14 +22,6 @@ class Config(metaclass=SingletonMetaClass):
     @property
     def token(self) -> str:
         return self._token
-
-    @property
-    def host(self) -> str:
-        return self._host
-
-    @property
-    def port(self) -> int:
-        return self._port
 
     @staticmethod
     def _get_required_var(env_variable_name: str) -> str:
