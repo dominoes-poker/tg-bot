@@ -1,8 +1,7 @@
 from typing import List
 
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, Session
 
-Session = None
 
 class BaseModel(declarative_base()):
     __abstract__ = True

@@ -39,4 +39,4 @@ class IncomingMessageWrapper(IncomingMessage):
         return self._tg_object.from_user.id
 
 
-ReplyMarkupType = Union[Type[ReplyKeyboardMarkup], Type[ReplyKeyboardRemove]]
+ReplyMarkupType = Union[ReplyKeyboardMarkup, ReplyKeyboardRemove]

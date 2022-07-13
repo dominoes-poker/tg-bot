@@ -1,5 +1,5 @@
 from common import SingletonMetaClass
-from services.serializer import Serializer
+from services.serializers import Serializer
 
 
 class DataService(metaclass=SingletonMetaClass):

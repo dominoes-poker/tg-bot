@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from bot.routers.utils import get_ending_for_ordered_number
 
@@ -34,7 +34,7 @@ def keyboard_start_new_round(round_number: int) -> ReplyKeyboardMarkup:
     )
 
 
-def keyboard_from_data(data: List[str]) -> ReplyKeyboardMarkup:
+def keyboard_from_data(data: List[Union[str, int]]) -> ReplyKeyboardMarkup:
     buttons = []
     for index, value in enumerate(data):
         button = KeyboardButton(text=value)

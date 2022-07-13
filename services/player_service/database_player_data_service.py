@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Iterable
 
 from sqlalchemy import select, exc
 
@@ -10,24 +10,7 @@ from database.session import SessionManager
 from services.database_mixin import DatabaseMixin
 
 from services.player_service.player_data_service import PlayerDataService
-from services.serializer import Serializer
-
-
-class PlayerSerializer(Serializer):
-    def serialize(self, player: Player) -> DBPlayer:
-        return DBPlayer(
-            username=player.username,
-            identificator=player.identificator
-        )
-    
-    def deserialize(self, player: DBPlayer) -> Optional[Player]:
-        if not player:
-            return None
-        return Player(
-            id=player.id,
-            username=player.username,
-            identificator=player.identificator
-        )
+from services.serializers import Serializer
 
 
 class DataBasePlayerDataService(PlayerDataService, DatabaseMixin):
@@ -53,6 +36,6 @@ class DataBasePlayerDataService(PlayerDataService, DatabaseMixin):
         query = select(DBPlayer).where(DBPlayer.username == username)
         return await self.first(query)
     
-    async def get_players_by_username(self, usernames: List[str]) -> List[Player]:
-        query = select(DBPlayer).where(DBPlayer.username.in_(usernames))
+    async def get_players_by_username(self, usernames: Iterable[str]) -> List[Player]:
+        query = select(DBPlayer).where(DBPlayer.username.in_(list(usernames)))
         return await self.all(query)

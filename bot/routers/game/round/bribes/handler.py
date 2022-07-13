@@ -111,7 +111,7 @@ class BribesHandler(Handler):
     @staticmethod
     def _get_player_to_ask_results(game: Game) -> Optional[Player]:
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
-        players_ask_results = {stake.player_id for stake in stakes if stake.bribe is None}
+        players_ask_results = [stake.player_id for stake in stakes if stake.bribe is None]
 
         for player in game.players:
             if player.id in players_ask_results:

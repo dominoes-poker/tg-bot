@@ -2,8 +2,7 @@ from typing import Optional
 
 from aiogram.dispatcher.fsm.state import State
 
-from bot.routers.player_register.handler import \
-    PlayerRegisterHandler
+from bot.routers.player_register.handler import PlayerRegisterHandler
 from bot.services.context_service import ContextService
 from bot.states import ExternalPlayerRegisterState
 from bot.data_types import IncomingMessage
@@ -25,5 +24,4 @@ class ExternalPlayerRegisterHandler(PlayerRegisterHandler):
 
     @staticmethod
     def _get_final_message(username: str) -> str:
-        return f'Congratulations! We have registered a new player - `{username}`! ' \
-                'What do you want next?'
+        return f'Congratulations! We have registered a new player - `{username}`! What do you want to do next?'

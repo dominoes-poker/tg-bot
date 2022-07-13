@@ -24,14 +24,14 @@ class ContextService:
         return data.get('current_game_id')
 
     async def wait_bet_of(self, player: Player) -> None:
-        return await self._context.update_data({'wait_bet_from': player.username})
+        await self._context.update_data({'wait_bet_from': player.username})
 
     async def from_whom_expect_bet(self) -> str:
         data = await self._context.get_data()
         return data.pop('wait_bet_from')
 
     async def wait_bribe_of(self, player: Player) -> None:
-        return await self._context.update_data({'wait_bribe_from': player.username})
+        await self._context.update_data({'wait_bribe_from': player.username})
 
     async def from_whom_expect_bribe(self) -> Optional[str]:
         data = await self._context.get_data()
