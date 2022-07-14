@@ -2,14 +2,10 @@ import asyncio
 import logging
 import sys
 
-from aiohttp.web import run_app
-from aiohttp.web_app import Application
-
 from config import create_config, ConfigType, Config
 from bot import DPBot, BotFactory
 from database.models.base import BaseModel
 from database.session import SessionManager
-from aiogram.dispatcher.webhook.aiohttp_server import setup_application
 
 
 async def initialize_models(config: Config):

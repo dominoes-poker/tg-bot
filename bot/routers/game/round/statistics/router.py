@@ -20,6 +20,7 @@ def setup_router(router: DPRouter, handler: StatisticsHandler) -> None:
     ]
     router.setup_handler(handler.show_game_statistics, *game_statistics_filters)
 
+
 def create_statistics_router(bot: DPBot,
                             game_data_service: GameDataService) -> DPRouter:
     router = DPRouter(name='<ShowStatistics> - Router')

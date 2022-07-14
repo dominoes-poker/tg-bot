@@ -44,7 +44,7 @@ class BetsHandler(Handler):
 
         await self._bot.send(
             chat_id=message.user_id,
-            text=f'Who many does `{username}` bet?',
+            text=f'How many does `{username}` bet?',
             reply_markup=keyboard_from_data(self._get_variants_to_bet(game))
         )
         return MakeBetsState.BET

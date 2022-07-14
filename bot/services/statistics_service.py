@@ -22,7 +22,7 @@ class Statistics:
     def sorted(self, names: bool = True) -> List[Tuple[Union[str, int], int]]:
         sorted_players = sorted(
             self._statistics.keys(),
-            key=lambda player_id: self._statistics[player_id]
+            key=lambda p_id: self._statistics[p_id]
         )
         result = []
         for player_id in sorted_players:
@@ -38,6 +38,7 @@ class RoundStatiticsService:
     def total(self, round_: Round) -> Statistics:
         return self._statistics.update_from_round(round_)
 
+
 class GameStatiticsService:
     def __init__(self, players: Iterable[Player]) -> None:
         self._statistics = Statistics(players)
@@ -46,6 +47,7 @@ class GameStatiticsService:
         for round_ in game.rounds:
             self._statistics.update_from_round(round_)
         return self._statistics
+
 
 class StatisticsPresentService:
     @staticmethod
