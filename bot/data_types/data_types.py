@@ -41,8 +41,6 @@ class Game:
             return sorted(self.rounds, key=lambda round_: round_.number, reverse=True)[0]
         return None
 
-    def get_round(self, round_number: int) -> Round:
-        try:
-            return next(filter(lambda round_: round_.number == round_number, self.rounds))
-        except StopIteration as err:
-            raise ValueError(f'Cannot find round with number `{round_number}`') from err
+    @property
+    def max_round_number(self) -> int:
+        return 17

@@ -3,7 +3,7 @@ from bot.routers.common.keyboards import KEYBOARD_ON_HOLD
 from bot.routers.handler import Handler
 from bot.services.context_service import ContextService
 from services.game_service import GameDataService
-from bot.states import GameState
+from bot.states import RootState
 from bot.data_types import IncomingMessage
 
 
@@ -22,4 +22,4 @@ class FinishGameHandler(Handler):
             text='Hope, it was wonderful for you as for me!',
             reply_markup=KEYBOARD_ON_HOLD
         )
-        return GameState.WAIT_PLAYER_USERNAMES
+        return RootState.ON_HOLD

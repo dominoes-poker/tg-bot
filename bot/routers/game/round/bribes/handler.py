@@ -74,19 +74,19 @@ class BribesHandler(Handler):
 
     async def _finish(self, user_id: int, game: Game) -> State:
         next_round_number = game.last_round.number + 1
-        if next_round_number < 17:
+        if next_round_number <= game.max_round_number:
             await self._bot.send(
                     chat_id=user_id,
                     text='The round has finished',
                     reply_markup=keyboard_after_round(next_round_number)
             )
-            return RoundState.ON_HOLD
-        await self._bot.send(
-                    chat_id=user_id,
-                    text='The game is over',
-                    reply_markup=KEYBOARD_GAME_OVER
-            )
-        return RootState.ON_HOLD
+        else:
+            await self._bot.send(
+                        chat_id=user_id,
+                        text='The game is over',
+                        reply_markup=KEYBOARD_GAME_OVER
+                )
+        return RoundState.ON_HOLD
 
     async def _set_bribe(self, player_id: int, bribe: int, game: Game) -> Game:
         stake = Stake(
@@ -99,13 +99,14 @@ class BribesHandler(Handler):
     @staticmethod
     def _get_bribes_variants(game: Game) -> Optional[List[int]]:
         stakes = sorted(game.last_round.stakes, key=lambda stake: stake.id)
-        taken = sum(stake.bribe for stake in stakes if stake.bribe is not None)
+        taken = [stake.bribe for stake in stakes if stake.bribe is not None]
 
-        remaining_bribes = get_number_of_dices(game, game.last_round.number) - taken
+        remaining_bribes = get_number_of_dices(game, game.last_round.number) - sum(taken)
 
         if remaining_bribes == 0:
             return None
-
+        if len(taken) == len(game.players) - 1:
+            return [remaining_bribes]
         return list(range(remaining_bribes + 1))
 
     @staticmethod

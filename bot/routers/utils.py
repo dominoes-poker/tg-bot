@@ -5,13 +5,19 @@ def get_number_of_dices(game: Game, round_number: int) -> int:
 
     number_of_players = len(game.players)
     max_number_of_dices = 28 // number_of_players
+    repeat_rounds = game.max_round_number - (2 * max_number_of_dices)
 
-    if max_number_of_dices > round_number:
+    if round_number <= max_number_of_dices:
         return round_number
 
-    repeat_rounds = 17 - (2 * max_number_of_dices + 1)
-    if max_number_of_dices + repeat_rounds < round_number + 1:
+    if round_number <= max_number_of_dices + repeat_rounds:
         return max_number_of_dices
+
+    if round_number <= game.max_round_number - 1:
+        remainder = abs(round_number - 2 * max_number_of_dices - repeat_rounds)
+        return remainder
+
+    return max_number_of_dices
 
 
 def get_ending_for_ordered_number(number: int) -> str:

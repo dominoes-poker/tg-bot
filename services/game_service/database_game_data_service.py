@@ -81,5 +81,5 @@ class DataBaseGameDataService(GameDataService, DatabaseMixin):
         return await self.get_game(game_id)
 
     async def finish(self, game_id: int) -> Game:
-        query = select(DBGame).where(DBGame.game_id == game_id)
+        query = select(DBGame).where(DBGame.id == game_id)
         return await self.first(query)
